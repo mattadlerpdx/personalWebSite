@@ -1,0 +1,10 @@
+node_modules
+build
+.dockerignore
+Dockerfile
+.git
+.gitignore
+npm-debug.log
+src-folder-react.zip
+postcss.config.js
+tailwind.config.js
