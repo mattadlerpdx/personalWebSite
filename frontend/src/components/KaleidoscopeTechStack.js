@@ -60,7 +60,7 @@ export default function KaleidoscopeTechStack() {
         top: `${y}px`,
         left: `${x}px`,
         transform: 'translate(-50%, -50%)',
-        animationDelay: `${Math.random() * 2}s`,
+        animationDelay: `${Math.random() * 3}s`,
         animation: 'floatOrganic 4s ease-in-out infinite, glowPulse 3.5s ease-in-out infinite',
         boxShadow: `0 0 0 0 ${glowColors[i % glowColors.length]}`,
       }}

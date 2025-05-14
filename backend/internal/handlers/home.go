@@ -3,5 +3,5 @@ package handlers
 import "net/http"
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-    w.Write([]byte("Welcome to Matt Adler's Personal API"))
+	w.Write([]byte("Welcome to Matt Adler's Personal API"))
 }
