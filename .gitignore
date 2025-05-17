@@ -1,17 +1,101 @@
-# Node
-node_modules
-build
-.env
+# ================================
+# GLOBAL IGNORES
+# ================================
 
-# Go
-bin
-*.log
-
-# OS
+# OS and editor files
 .DS_Store
 Thumbs.db
+*.log
 
-# Editor
-.vscode
-.idea
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Archives and compressed files
+*.zip
+*.tar.gz
+*.rar
+
+# Mac trash
+.Trashes
+._*
+
+# ================================
+# NODE / REACT FRONTEND
+# ================================
+
+# Node modules
+node_modules/
+
+# Build output
+build/
+dist/
+.cache/
+
+# Testing
+coverage/
+jest-cache/
+.nyc_output/
+
+# Dependency directories
+bower_components/
+
+# CRA or Vite specific
+*.tsbuildinfo
+
+# ================================
+# GO BACKEND
+# ================================
+
+# Binaries and build output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Dependency management
+vendor/
+
+# GoLand / JetBrains
+*.iml
+*.ipr
+*.iws
+.goland/
+
+# Go module cache
+go.sum
+go.work.sum
+
+# ================================
+# GIT / CI TOOLS
+# ================================
+
+# GitHub-specific
+.gitattributes
+.github/
+
+# Ignore Git Large File Storage metadata
+*.lfs
+
+# ================================
+# PERSONAL ADDITIONS
+# ================================
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+
+# Local test files
+test-data/
