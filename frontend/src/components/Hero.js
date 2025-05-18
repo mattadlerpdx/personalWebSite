@@ -8,11 +8,12 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Hero({ darkMode }) {
   const sectionRef = useRef(null);
   const [showChevron, setShowChevron] = useState(true);
-  const [showGreeting, setShowGreeting] = useState(true);
-
+  const animationRef = useRef(null);
 
   // Scroll-triggered word animation
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const words = gsap.utils.toArray('.word');
     gsap.set(words, {
       opacity: 0.2,
@@ -21,7 +22,7 @@ export default function Hero({ darkMode }) {
 
     const color = darkMode ? '#ffffff' : '#000000';
 
-    const animation = gsap.to(words, {
+    animationRef.current = gsap.to(words, {
       opacity: 1,
       color: color,
       stagger: 0.2,
@@ -35,10 +36,11 @@ export default function Hero({ darkMode }) {
       },
     });
 
-    ScrollTrigger.refresh();
-
     return () => {
-      animation.scrollTrigger?.kill();
+      if (animationRef.current?.scrollTrigger) {
+        animationRef.current.scrollTrigger.kill();
+      }
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [darkMode]);
 

@@ -46,11 +46,13 @@ function ProjectsPage() {
                       </span>
                     ))}
                   </div>
-                )}
+                )
+                }
               </div>
             ))}
           </div>
-        )}
+        )
+        }
       </div>
     </div>
   );

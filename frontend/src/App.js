@@ -1,36 +1,35 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { HashRouter as Router } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import KaleidoscopeTechStack from './components/KaleidoscopeTechStack';
-import Projects from './components/Projects';
+import AppRoutes from './routes';
+import './index.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  const navbarRef = useRef(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
 
-  // Apply Tailwind dark mode
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
+    localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
-    <div className="font-sans bg-white text-black dark:bg-black dark:text-white min-h-screen transition-colors duration-300">
-      <Navbar
-        ref={navbarRef}
-        darkMode={darkMode}
-        toggleDarkMode={() => setDarkMode(!darkMode)}
-      />
-      <Hero darkMode={darkMode} />
-      <About />
-      <KaleidoscopeTechStack />
-      <Projects />
-    </div>
+    <Router>
+      <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
+        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <div className="pt-16">
+          <AppRoutes />
+        </div>
+      </div>
+    </Router>
   );
 }
 

@@ -1,17 +1,32 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
 
-const Navbar = forwardRef(({ darkMode, toggleDarkMode }, ref) => {
+const Navbar = ({ darkMode, toggleDarkMode }) => {
+  const location = useLocation();
+
   return (
-    <nav
-      ref={ref}
-      className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
-    >
-      <span className="text-xl font-bold dark:text-white">Matt</span>
+    <nav className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300">
+      <Link to="/" className="text-xl font-bold dark:text-white">Matt</Link>
       <div className="flex items-center space-x-6">
-        <a href="#about" className="hover:underline dark:text-white">About</a>
-        <a href="#projects" className="hover:underline dark:text-white">Projects</a>
-        <a href="#contact" className="hover:underline dark:text-white">Contact</a>
+        <Link 
+          to="/about" 
+          className={`hover:underline dark:text-white ${location.pathname === '/about' ? 'underline' : ''}`}
+        >
+          About
+        </Link>
+        <Link 
+          to="/projects" 
+          className={`hover:underline dark:text-white ${location.pathname === '/projects' ? 'underline' : ''}`}
+        >
+          Projects
+        </Link>
+        <Link 
+          to="/contact" 
+          className={`hover:underline dark:text-white ${location.pathname === '/contact' ? 'underline' : ''}`}
+        >
+          Contact
+        </Link>
         <button
           onClick={toggleDarkMode}
           className="p-2 rounded transition-colors duration-200 text-black dark:text-white"
@@ -26,6 +41,6 @@ const Navbar = forwardRef(({ darkMode, toggleDarkMode }, ref) => {
       </div>
     </nav>
   );
-});
+};
 
 export default Navbar;
