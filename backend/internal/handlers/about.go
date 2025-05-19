@@ -14,7 +14,7 @@ type AboutInfo struct {
 
 func AboutHandler(w http.ResponseWriter, r *http.Request) {
 	about := AboutInfo{
-		Name:        "Matt l;kj;lkjAdler",
+		Name:        "Matt Adler",
 		Title:       "Software Engineer",
 		Description: "Passionate about building innovative solutions and creating impactful software.",
 		Skills:      []string{"Go", "React", "TypeScript", "Docker", "AWS"},

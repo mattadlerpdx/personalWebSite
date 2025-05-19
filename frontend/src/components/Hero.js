@@ -10,36 +10,40 @@ export default function Hero({ darkMode }) {
   const [showChevron, setShowChevron] = useState(true);
   const animationRef = useRef(null);
 
-  // Scroll-triggered word animation
   useEffect(() => {
     if (!sectionRef.current) return;
 
     const words = gsap.utils.toArray('.word');
     gsap.set(words, {
-      opacity: 0.2,
+      autoAlpha: 0.2,
       color: '#9ca3af',
     });
 
     const color = darkMode ? '#ffffff' : '#000000';
 
-    animationRef.current = gsap.to(words, {
-      opacity: 1,
-      color: color,
-      stagger: 0.2,
-      ease: 'none',
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: 'top top',
+        start: 'top top+=64',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1,
         pin: true,
+        anticipatePin: 1,
       },
     });
 
+    tl.to(words, {
+      autoAlpha: 1,
+      color,
+      stagger: 0.2,
+      ease: 'none',
+      duration: 1,
+    });
+
+    animationRef.current = tl;
+
     return () => {
-      if (animationRef.current?.scrollTrigger) {
-        animationRef.current.scrollTrigger.kill();
-      }
+      animationRef.current?.scrollTrigger?.kill();
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [darkMode]);
@@ -55,29 +59,36 @@ export default function Hero({ darkMode }) {
   }, []);
 
   const sentence = [
-    'Building', 'the', 'future,', 'one',
-    'line', 'of', 'code', 'at', 'a', 'time.'
+    "Patience,", "precision,", "progress", "—",
+    "one", "line", "of", "code", "at", "a", "time."
   ];
 
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden"
+      className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden transition-colors duration-500 ease-in-out"
     >
-      {/* Main hero content (underneath greeting) */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold flex flex-wrap gap-2 max-w-7xl px-4 text-left">
-          {sentence.map((word, i) => (
-            <span key={i} className="word">{word}</span>
-          ))}
-        </h1>
+      {/* Main hero content */}
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold flex flex-wrap gap-2 max-w-7xl px-4 text-left transition-colors duration-500 ease-in-out">
+        {sentence.map((word, i) => (
+          <span
+            key={i}
+            className="word text-gray-400 opacity-0"
+            style={{ visibility: 'hidden' }}
+          >
+            {word}
+          </span>
+        ))}
+      </h1>
 
       {/* Chevron */}
       {showChevron && (
         <ChevronDownIcon
-          className="absolute bottom-10 h-12 w-12 text-gray-400 dark:text-white animate-bounce z-10"
+          className="absolute bottom-10 h-12 w-12 text-gray-400 dark:text-white animate-bounce z-10 transition-colors duration-500 ease-in-out"
           aria-hidden="true"
         />
       )}
     </section>
   );
 }
+
