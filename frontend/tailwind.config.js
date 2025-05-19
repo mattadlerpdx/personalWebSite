@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: 'class',
@@ -6,24 +5,24 @@ module.exports = {
     extend: {
       keyframes: {
         floatOrganic: {
-          '0%':   { transform: 'translate(-50%, -50%) translateY(0)' },
-          '25%':  { transform: 'translate(-50%, -50%) translateY(-6px)' },
-          '50%':  { transform: 'translate(-50%, -50%) translateY(3px)' },
-          '75%':  { transform: 'translate(-50%, -50%) translateY(-5px)' },
-          '100%': { transform: 'translate(-50%, -50%) translateY(0)' },
+          '0%': { transform: 'translate(-50%, -50%) translateY(0px)' },
+          '20%': { transform: 'translate(-50%, -50%) translateY(-4px)' },
+          '40%': { transform: 'translate(-50%, -50%) translateY(3px)' },
+          '60%': { transform: 'translate(-50%, -50%) translateY(-6px)' },
+          '80%': { transform: 'translate(-50%, -50%) translateY(2px)' },
+          '100%': { transform: 'translate(-50%, -50%) translateY(0px)' },
         },
-        glowPulse: {
-          '0%, 100%': {
-            boxShadow: '0 0 0px 0 rgba(0, 200, 255, 0.0)',
-          },
-          '50%': {
-            boxShadow: '0 0 12px 6px rgba(0, 200, 255, 0.25)',
-          },
+        wiggleRotate: {
+          '0%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(1.5deg)' },
+          '50%': { transform: 'rotate(-1.5deg)' },
+          '75%': { transform: 'rotate(1deg)' },
+          '100%': { transform: 'rotate(0deg)' },
         },
       },
       animation: {
-        'float-organic': 'floatOrganic 4s ease-in-out infinite',
-        'glow-pulse': 'glowPulse 3.5s ease-in-out infinite',
+        floatOrganic: 'floatOrganic 5s ease-in-out infinite',
+        wiggleRotate: 'wiggleRotate 6s ease-in-out infinite',
       },
     },
   },

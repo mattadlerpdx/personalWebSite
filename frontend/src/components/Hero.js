@@ -59,8 +59,8 @@ export default function Hero({ darkMode }) {
   }, []);
 
   const sentence = [
-    "Patience,", "precision,", "progress", "—",
-    "one", "line", "of", "code", "at", "a", "time."
+    "The", "world", "is", "built", "on",
+    "code.", "Let's", "write", "it...",
   ];
 
   return (

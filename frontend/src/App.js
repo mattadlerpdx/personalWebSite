@@ -26,7 +26,7 @@ function App() {
       <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
         <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         <div className="pt-16">
-          <AppRoutes />
+          <AppRoutes darkMode={darkMode} /> {/* ✅ pass darkMode to routes */}
         </div>
       </div>
     </Router>

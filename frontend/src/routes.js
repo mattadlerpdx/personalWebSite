@@ -1,3 +1,4 @@
+// AppRoutes.js
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -6,19 +7,18 @@ import Projects from './components/Projects';
 import ContactPage from './pages/ContactPage';
 import ResumePage from './pages/ResumePage';
 
-// Wrap the home page components to ensure proper cleanup
-const HomePage = () => (
+const HomePage = ({ darkMode }) => (
   <div className="home-page">
     <Hero />
     <About />
-    <KaleidoscopeTechStack />
+    <KaleidoscopeTechStack darkMode={darkMode} /> {/* ✅ pass darkMode here */}
   </div>
 );
 
-const AppRoutes = () => {
+const AppRoutes = ({ darkMode }) => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<HomePage darkMode={darkMode} />} />
       <Route path="/projects" element={<Projects />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<ContactPage />} />
@@ -28,4 +28,4 @@ const AppRoutes = () => {
   );
 };
 
-export default AppRoutes; 
+export default AppRoutes;

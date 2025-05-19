@@ -18,7 +18,7 @@ export default function KaleidoscopeTechStack({ darkMode }) {
       link: 'https://gitlab.com/mattadlerpdx',
     },
     {
-      srcLight: '/images/github-light.png',
+      srcLight: '/images/github-white.png',
       srcDark: '/images/github-dark.png',
       alt: 'GitHub',
       link: 'https://github.com/mattadlerpdx',
@@ -26,33 +26,54 @@ export default function KaleidoscopeTechStack({ darkMode }) {
   ];
 
   const glowColors = [
-    'rgba(0, 153, 255, 0.3)',   // C#
-    'rgba(145, 71, 255, 0.3)',  // .NET
-    'rgba(0, 200, 0, 0.3)',     // Go
-    'rgba(0, 190, 255, 0.3)',   // Docker
-    'rgba(255, 175, 0, 0.3)',   // GCloud
-    'rgba(255, 0, 128, 0.3)',   // GitLab
-    'rgba(255, 255, 255, 0.3)', // GitHub
+    'rgba(0, 153, 255, 0.3)',
+    'rgba(145, 71, 255, 0.3)',
+    'rgba(0, 200, 0, 0.3)',
+    'rgba(0, 190, 255, 0.3)',
+    'rgba(255, 175, 0, 0.3)',
+    'rgba(255, 0, 128, 0.3)',
+    'rgba(255, 255, 255, 0.3)',
   ];
 
   useEffect(() => {
+    const styleSheet = document.styleSheets[0];
+
     techIcons.forEach((_, i) => {
+      const glowColor = darkMode
+        ? glowColors[i % glowColors.length].replace('0.3', '0.6')
+        : glowColors[i % glowColors.length];
+
+      // Create glowing keyframes dynamically
+      const ruleName = `@keyframes glowPulse-${i} {
+        0%, 100% { box-shadow: 0 0 0px 0 ${glowColor}; }
+        50% { box-shadow: 0 0 16px 8px ${glowColor}; }
+      }`;
+
+      const exists = Array.from(styleSheet.cssRules).some(
+        (rule) => rule.name === `glowPulse-${i}`
+      );
+      if (!exists) {
+        styleSheet.insertRule(ruleName, styleSheet.cssRules.length);
+      }
+
+      // Animate transform organically (floating around center)
       const el = document.getElementById(`tech-icon-${i}`);
       if (el) {
-        const baseColor = glowColors[i % glowColors.length];
-        const adjustedGlow = darkMode
-          ? baseColor.replace(/0\.3\)$/, '0.6)')
-          : baseColor;
+        const floatRange = 10 + Math.random() * 10; // 10–20px drift
+        const angle = Math.random() * Math.PI * 2;
+        const dx = floatRange * Math.cos(angle);
+        const dy = floatRange * Math.sin(angle);
 
         el.animate(
           [
-            { boxShadow: `0 0 0px 0 ${adjustedGlow}` },
-            { boxShadow: `0 0 16px 10px ${adjustedGlow}` },
-            { boxShadow: `0 0 0px 0 ${adjustedGlow}` },
+            { transform: `translate(-50%, -50%) translate(0px, 0px)` },
+            { transform: `translate(-50%, -50%) translate(${dx}px, ${dy}px)` },
+            { transform: `translate(-50%, -50%) translate(0px, 0px)` },
           ],
           {
-            duration: 3500,
+            duration: 6000 + Math.random() * 2000,
             iterations: Infinity,
+            direction: 'alternate',
             easing: 'ease-in-out',
           }
         );
@@ -88,19 +109,25 @@ export default function KaleidoscopeTechStack({ darkMode }) {
         const x = CENTER + RADIUS * Math.cos(angle);
         const y = CENTER + RADIUS * Math.sin(angle);
 
-        const imgSrc = icon.srcDark && icon.srcLight
-          ? (darkMode ? icon.srcDark : icon.srcLight)
-          : icon.src;
+        const rawSrc =
+          icon.alt === 'GitHub'
+            ? darkMode
+              ? icon.srcDark
+              : icon.srcLight
+            : icon.src;
+
+        const imgSrc = `${rawSrc}?v=${darkMode ? 'dark' : 'light'}`;
 
         return (
           <div
             key={i}
             id={`tech-icon-${i}`}
-            className="absolute w-[60px] h-[60px] bg-white dark:bg-neutral-800 rounded-full shadow-md flex items-center justify-center animate-float-organic transition-colors duration-500 ease-in-out"
+            className="absolute w-[60px] h-[60px] bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center transition-colors duration-500 ease-in-out"
             style={{
               top: `${y}px`,
               left: `${x}px`,
               transform: 'translate(-50%, -50%)',
+              animation: `glowPulse-${i} 3s ease-in-out infinite`,
               animationDelay: `${Math.random() * 3}s`,
             }}
           >
