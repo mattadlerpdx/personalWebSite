@@ -59,17 +59,16 @@ export default function Hero({ darkMode }) {
   }, []);
 
   const sentence = [
-    "The", "world", "is", "built", "on",
-    "code.", "Let's", "write", "it...",
+    "Turning", "ideas", "into", "reality.", "One", "line", "of", "code", "at","a", "time..."
   ];
 
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden transition-colors duration-500 ease-in-out"
+      className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden transition-colors duration-500 ease-in-out px-4"
     >
       {/* Main hero content */}
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold flex flex-wrap gap-2 max-w-7xl px-4 text-left transition-colors duration-500 ease-in-out">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-wrap gap-2 max-w-7xl text-left">
         {sentence.map((word, i) => (
           <span
             key={i}

@@ -18,8 +18,8 @@ export default function KaleidoscopeTechStack({ darkMode }) {
       link: 'https://gitlab.com/mattadlerpdx',
     },
     {
-      srcLight: '/images/github-white.png',
-      srcDark: '/images/github-dark.png',
+      srcDark: '/images/github-light.png',
+      srcLight: '/images/github-dark.png',
       alt: 'GitHub',
       link: 'https://github.com/mattadlerpdx',
     },
@@ -32,7 +32,7 @@ export default function KaleidoscopeTechStack({ darkMode }) {
     'rgba(0, 190, 255, 0.3)',
     'rgba(255, 175, 0, 0.3)',
     'rgba(255, 0, 128, 0.3)',
-    'rgba(255, 255, 255, 0.3)',
+'rgba(0, 200, 80, 0.3)'
   ];
 
   useEffect(() => {

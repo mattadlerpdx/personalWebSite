@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
+import { gsap } from 'gsap';
 
-const Navbar = ({ darkMode, toggleDarkMode }) => {
+const Navbar = ({ darkMode, toggleDarkMode, animate }) => {
   const location = useLocation();
+  const navRef = useRef();
+
+  useEffect(() => {
+    if (animate) {
+      gsap.fromTo(
+        navRef.current,
+        { y: -80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power2.out', delay: 0.1 }
+      );
+    }
+  }, [animate]);
 
   return (
-    <nav className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300">
+    <nav
+      ref={navRef}
+      className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
+    >
       <Link to="/" className="text-xl font-bold dark:text-white">Matt</Link>
       <div className="flex items-center space-x-6">
         <Link 

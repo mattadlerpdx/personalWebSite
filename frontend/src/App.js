@@ -4,7 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
-import AppRoutes from './routes';
+import AppRoutes from './AppRoutes';
 import './index.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,7 +26,7 @@ function App() {
       <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
         <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         <div className="pt-16">
-          <AppRoutes darkMode={darkMode} /> {/* ✅ pass darkMode to routes */}
+          <AppRoutes />
         </div>
       </div>
     </Router>
