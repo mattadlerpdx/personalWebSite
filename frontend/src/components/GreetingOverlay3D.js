@@ -1,37 +1,67 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { gsap } from 'gsap';
 
+function getResponsiveCameraRadius(width, height) {
+  const aspectRatio = width / height;
+  const baseRadius = 2.5;
+  const baseAspect = 16 / 9;
+  const scale = baseAspect / aspectRatio;
+
+  let radius = baseRadius * scale;
+
+  // New: widen distance for medium-narrow screens (~875px or smaller)
+  if (width < 900) radius *= 1.2;
+  if (width < 768) radius *= 1.35;
+  if (width < 500) radius *= 1.5;
+
+  return Math.min(Math.max(radius, 2.5), 5); // Clamp for safety
+}
+
+
 function FlyoverCamera({ travelComplete, exiting }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const tRef = useRef(0);
-  const radiusRef = useRef(2.5); // initial camera altitude
-  const pitchUpRef = useRef(0);  // look-at Y offset
-  const pitchRightRef = useRef(0);    // rightward look offset
+  const radiusRef = useRef(getResponsiveCameraRadius(size.width, size.height));
+  const pitchUpRef = useRef(0);
+  const pitchRightRef = useRef(0);
+
+  useEffect(() => {
+    camera.aspect = size.width / size.height;
+
+    // ✅ Slightly wider field of view on small screens
+    camera.fov = size.width < 768 ? 65 : 75;
+    camera.updateProjectionMatrix();
+
+    radiusRef.current = getResponsiveCameraRadius(size.width, size.height);
+  }, [size, camera]);
 
   useFrame(() => {
-    tRef.current += 0.002; // forward motion (keep this steady)
-
+    tRef.current += 0.002;
     const lon = tRef.current;
-    const lat = 0.75;
+
+    const lat =
+      size.width < 500 ? 0.5 :
+        size.width < 768 ? 0.6 :
+          size.width < 900 ? 0.68 :
+            0.75;
 
 
     if (exiting.current) {
-      radiusRef.current += 0.008; // gentle ascent
+      radiusRef.current += 0.008;
       if (pitchUpRef.current < 0.8) {
-        pitchUpRef.current += 0.0004; // tilt up
-        pitchRightRef.current += 0.0003; // pan right
+        pitchUpRef.current += 0.0004;
+        pitchRightRef.current += 0.0003;
       }
     }
 
-    const r = radiusRef.current;
+const r = getResponsiveCameraRadius(size.width, size.height);
     const x = r * Math.cos(lat) * Math.cos(lon);
     const y = r * Math.sin(lat);
     const z = r * Math.cos(lat) * Math.sin(lon);
 
     camera.position.set(x, y, z);
 
-    // Look forward & slightly upward as we exit
     const lookAheadLon = lon + 0.05;
     const lookX = r * Math.cos(lat) * Math.cos(lookAheadLon);
     const lookY = r * Math.sin(lat) + pitchUpRef.current;
@@ -43,10 +73,14 @@ function FlyoverCamera({ travelComplete, exiting }) {
   return null;
 }
 
-
 function StaticSphere() {
+  const { size } = useThree();
+
+  // ✅ Slightly enlarge the sphere on very small screens (e.g., iPhone SE)
+  const scale = size.width < 450 ? 1.4 : 1;
+
   return (
-    <mesh>
+    <mesh scale={[scale, scale, scale]}>
       <sphereGeometry args={[2, 64, 64]} />
       <meshBasicMaterial wireframe color="#00" />
     </mesh>
@@ -73,12 +107,12 @@ export default function GreetingOverlay3D({ onComplete }) {
       )
       .add(() => {
         travelComplete.current = true;
-        exiting.current = true; // initiate flyaway
+        exiting.current = true;
       })
       .to(
         overlayRef.current,
-        { opacity: 0, duration: 2.5, ease: 'power2.inOut' },
-        "+=1"
+        { opacity: 0, duration: 1.5, ease: 'power2.inOut' },
+        "+=0.3"
       )
       .add(() => {
         onComplete();
@@ -101,7 +135,7 @@ export default function GreetingOverlay3D({ onComplete }) {
 
       <div
         ref={textRef}
-        className="absolute inset-0 flex flex-col justify-center items-center text-center text-3xl font-semibold tracking-tight"
+        className="absolute inset-0 flex flex-col justify-center items-center text-center text-3xl md:text-4xl font-semibold tracking-tight px-4"
       >
         <p>Hello, I'm Matt —</p>
         <p>engineer, system builder, explorer.</p>

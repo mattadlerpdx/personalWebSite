@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure consistent box model across all elements */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll from overflow issues */
 html, body {
   scroll-behavior: smooth;
+  overflow-x: hidden; /* ✅ This is key for fixing the iPhone SE white space */
 }

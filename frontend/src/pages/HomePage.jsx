@@ -13,7 +13,7 @@ function HomePage() {
 
   useEffect(() => {
     const words = gsap.utils.toArray('.word');
-    
+
     gsap.set(words, {
       opacity: 0.2,
       color: '#9ca3af', // faded gray for both modes
@@ -45,13 +45,36 @@ function HomePage() {
 
   return (
     <div className="min-h-screen">
+      {/* Hero Section */}
       <section ref={heroSectionRef}>
         <Hero />
       </section>
-      <About />
-      <KaleidoscopeTechStack />
-      <Projects />
-      
+
+      {/* Add spacing below Hero */}
+      <div className="h-20 sm:h-24" />
+
+      {/* About Section */}
+      <section className="px-4 sm:px-6 lg:px-8">
+        <About />
+      </section>
+
+      {/* Add spacing below About */}
+      <div className="h-20 sm:h-24" />
+
+      {/* Tech Stack Section */}
+      <section className="px-4 sm:px-6 lg:px-8">
+        <KaleidoscopeTechStack darkMode={darkMode} className="mt-40" />
+      </section>
+
+      {/* Add spacing below Tech Stack */}
+      <div className="h-20 sm:h-24" />
+
+      {/* Projects Section */}
+      <section className="px-4 sm:px-6 lg:px-8">
+        <Projects />
+      </section>
+
+      {/* Call to Action Buttons */}
       <section className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex flex-wrap justify-center gap-4">
@@ -80,4 +103,4 @@ function HomePage() {
   );
 }
 
-export default HomePage; 
+export default HomePage;

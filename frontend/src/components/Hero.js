@@ -1,23 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import useScrollTop from '../hooks/useScrollTop'; // ⬅️ import hook
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero({ darkMode }) {
   const sectionRef = useRef(null);
-  const [showChevron, setShowChevron] = useState(true);
   const animationRef = useRef(null);
+  const atTop = useScrollTop(); // ⬅️ use hook
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-
     const words = gsap.utils.toArray('.word');
-    gsap.set(words, {
-      autoAlpha: 0.2,
-      color: '#9ca3af',
-    });
+    gsap.set(words, { autoAlpha: 0.2, color: '#9ca3af' });
 
     const color = darkMode ? '#ffffff' : '#000000';
 
@@ -48,26 +44,25 @@ export default function Hero({ darkMode }) {
     };
   }, [darkMode]);
 
-  // Show/hide chevron based on scroll
   useEffect(() => {
-    const onScroll = () => {
-      setShowChevron(window.scrollY <= 10);
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    if (sectionRef.current) {
+      gsap.fromTo(
+        sectionRef.current,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 }
+      );
+    }
   }, []);
 
   const sentence = [
-    "Turning", "ideas", "into", "reality.", "One", "line", "of", "code", "at","a", "time..."
+    'Turning', 'ideas', 'into', 'reality.', 'One', 'line', 'of', 'code', 'at', 'a', 'time...'
   ];
 
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden transition-colors duration-500 ease-in-out px-4"
+      className="opacity-0 min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden transition-colors duration-500 ease-in-out px-4"
     >
-      {/* Main hero content */}
       <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-wrap gap-2 max-w-7xl text-left">
         {sentence.map((word, i) => (
           <span
@@ -80,8 +75,7 @@ export default function Hero({ darkMode }) {
         ))}
       </h1>
 
-      {/* Chevron */}
-      {showChevron && (
+      {atTop && (
         <ChevronDownIcon
           className="absolute bottom-10 h-12 w-12 text-gray-400 dark:text-white animate-bounce z-10 transition-colors duration-500 ease-in-out"
           aria-hidden="true"
@@ -90,4 +84,3 @@ export default function Hero({ darkMode }) {
     </section>
   );
 }
-

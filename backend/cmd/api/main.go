@@ -11,50 +11,76 @@ import (
 	"github.com/rs/cors"
 )
 
+// === Middleware: Secure HTTP Headers ===
+func secureHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
+		w.Header().Set("Content-Security-Policy", "default-src 'self'")
+		next.ServeHTTP(w, r)
+	})
+}
+
+// === Middleware: Logging Requests ===
+func logMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s - %s %s", r.RemoteAddr, r.Method, r.URL.Path)
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
-	// Set up the router
+	// === Router Setup ===
 	r := mux.NewRouter()
 
-	// Simple API routes matching frontend paths
+	// === API Routes ===
 	r.HandleFunc("/projects", handlers.ProjectsHandler).Methods("GET")
 	r.HandleFunc("/about", handlers.AboutHandler).Methods("GET")
 	r.HandleFunc("/contact", handlers.ContactHandler).Methods("POST")
 	r.HandleFunc("/resume", handlers.ResumeHandler).Methods("GET")
 
-	// Serve static files from the React app
+	// === Serve Static Files ===
 	buildPath := filepath.Join("..", "..", "frontend", "build")
 	fs := http.FileServer(http.Dir(buildPath))
 
-	// Serve static assets
 	r.PathPrefix("/static/").Handler(fs)
 	r.PathPrefix("/assets/").Handler(fs)
 	r.PathPrefix("/images/").Handler(fs)
 
-	// Serve index.html for all other routes (for SPA)
+	// === Serve index.html for SPA Routes ===
 	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		indexPath := filepath.Join(buildPath, "index.html")
 		http.ServeFile(w, r, indexPath)
 	})
 
-	// Configure CORS for development
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization"},
-		AllowCredentials: true,
-		Debug:            true, // Enable CORS debugging in development
+	// === Not Found Handler (Optional fallback for API) ===
+	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.NotFound(w, r)
 	})
 
-	// Apply CORS middleware to the router
-	handler := c.Handler(r)
+	// === CORS Configuration ===
+	allowedOrigins := []string{"http://localhost:3000"}
+	if os.Getenv("ENV") == "production" {
+		allowedOrigins = []string{"https://yourdomain.com"}
+	}
 
-	// Get the server port from environment variables or use a default
+	c := cors.New(cors.Options{
+		AllowedOrigins:   allowedOrigins,
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: false,
+	})
+
+	// === Compose Final Handler with Middleware Stack ===
+	finalHandler := logMiddleware(secureHeaders(c.Handler(r)))
+
+	// === Determine Port for Cloud Run / Local ===
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	// Start the server
 	log.Printf("Server running on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, handler))
+	log.Fatal(http.ListenAndServe(":"+port, finalHandler))
 }

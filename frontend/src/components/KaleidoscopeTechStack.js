@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function KaleidoscopeTechStack({ darkMode }) {
+export default function KaleidoscopeTechStack({ darkMode, className = '' }) {  
   const ICON_SIZE = 60;
   const CONTAINER_SIZE = 400;
   const CENTER = CONTAINER_SIZE / 2;
@@ -82,6 +82,7 @@ export default function KaleidoscopeTechStack({ darkMode }) {
   }, [darkMode]);
 
   return (
+  <section className={`mt-24 sm:mt-32 ${className}`}>
     <div
       className="relative mx-auto transition-colors duration-500 ease-in-out"
       style={{ width: `${CONTAINER_SIZE}px`, height: `${CONTAINER_SIZE}px` }}
@@ -150,5 +151,6 @@ export default function KaleidoscopeTechStack({ darkMode }) {
         );
       })}
     </div>
+    </section>
   );
 }
