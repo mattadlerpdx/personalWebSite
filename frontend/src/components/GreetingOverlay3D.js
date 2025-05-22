@@ -2,21 +2,10 @@ import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { gsap } from 'gsap';
 
-function getResponsiveCameraRadius(width, height) {
-  const aspectRatio = width / height;
-  const baseRadius = 2.5;
-  const baseAspect = 16 / 9;
-  const scale = baseAspect / aspectRatio;
-
-  let radius = baseRadius * scale;
-
-  // New: widen distance for medium-narrow screens (~875px or smaller)
-  if (width < 900) radius *= 1.2;
-  if (width < 768) radius *= 1.35;
-  if (width < 500) radius *= 1.5;
-
-  return Math.min(Math.max(radius, 2.5), 5); // Clamp for safety
+function getResponsiveCameraRadius() {
+  return 2.5; // fixed distance for consistent scale
 }
+
 
 
 function FlyoverCamera({ travelComplete, exiting }) {
@@ -47,13 +36,16 @@ function FlyoverCamera({ travelComplete, exiting }) {
             0.75;
 
 
-    if (exiting.current) {
-      radiusRef.current += 0.008;
-      if (pitchUpRef.current < 0.8) {
-        pitchUpRef.current += 0.0004;
-        pitchRightRef.current += 0.0003;
-      }
-    }
+if (exiting.current) {
+  radiusRef.current += 0.008;
+
+  // ⏩ Increase these values to speed up the pan-up effect
+  if (pitchUpRef.current < 0.8) {
+    pitchUpRef.current += 0.0012;  // was 0.0004
+    pitchRightRef.current += 0.001; // was 0.0003
+  }
+}
+
 
 const r = getResponsiveCameraRadius(size.width, size.height);
     const x = r * Math.cos(lat) * Math.cos(lon);
@@ -62,7 +54,7 @@ const r = getResponsiveCameraRadius(size.width, size.height);
 
     camera.position.set(x, y, z);
 
-    const lookAheadLon = lon + 0.05;
+    const lookAheadLon = lon + 0.08;
     const lookX = r * Math.cos(lat) * Math.cos(lookAheadLon);
     const lookY = r * Math.sin(lat) + pitchUpRef.current;
     const lookZ = r * Math.cos(lat) * Math.sin(lookAheadLon);
@@ -76,8 +68,11 @@ const r = getResponsiveCameraRadius(size.width, size.height);
 function StaticSphere() {
   const { size } = useThree();
 
-  // ✅ Slightly enlarge the sphere on very small screens (e.g., iPhone SE)
-  const scale = size.width < 450 ? 1.4 : 1;
+const baseWidth = 900;
+const slope = 0.0004;
+const scale = Math.min(1.18, +(1 + (baseWidth - size.width) * slope).toFixed(3));
+
+
 
   return (
     <mesh scale={[scale, scale, scale]}>
