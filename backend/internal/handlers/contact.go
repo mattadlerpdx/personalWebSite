@@ -9,6 +9,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/mattadlerpdx/personalWebsite/backend/internal/config"
 )
 
 // ContactForm represents the JSON payload
@@ -37,7 +39,6 @@ func logSubmission(form ContactForm) {
 }
 
 func ContactHandler(w http.ResponseWriter, r *http.Request) {
-	// Secure headers
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("Referrer-Policy", "no-referrer")
@@ -48,8 +49,7 @@ func ContactHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var form ContactForm
-	err := json.NewDecoder(r.Body).Decode(&form)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&form); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
@@ -61,31 +61,32 @@ func ContactHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	form.Message = sanitizeInput(form.Message)
-
-	// Log it to a file
 	logSubmission(form)
 
-	// Prepare email
+	// Compose message
 	subject := "New Contact Form Submission"
 	body := fmt.Sprintf("Name: %s\nEmail: %s\nMessage:\n%s", form.Name, form.Email, form.Message)
-	fullMessage := "Subject: " + subject + "\r\n\r\n" + body
 
-	// SMTP Config
-	smtpHost := "smtp.gmail.com"
-	smtpPort := "587"
-	from := os.Getenv("SMTP_USER")
-	password := os.Getenv("SMTP_PASS")
-	to := "matt.adler.pdx@gmail.com" // Replace with your actual receiving address
+	// Email headers
+	from := config.AppConfig.SMTPUser
+	password := config.AppConfig.SMTPPass
+	to := "matt.adler.pdx@gmail.com"
 
-	auth := smtp.PlainAuth("", from, password, smtpHost)
+	headers := fmt.Sprintf(
+		"From: %s\r\nReply-To: %s\r\nSubject: %s\r\n\r\n",
+		from, form.Email, subject,
+	)
 
-	err = smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, []byte(fullMessage))
+	message := headers + body
+
+	// Send via Gmail
+	auth := smtp.PlainAuth("", from, password, "smtp.gmail.com")
+	err := smtp.SendMail("smtp.gmail.com:587", auth, from, []string{to}, []byte(message))
 	if err != nil {
 		http.Error(w, `{"message":"Failed to send email"}`, http.StatusInternalServerError)
 		return
 	}
 
-	// Return success as JSON
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message":"Message sent successfully"}`))
 }

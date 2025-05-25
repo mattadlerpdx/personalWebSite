@@ -3,7 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
 import { gsap } from 'gsap';
 
-const Navbar = ({ darkMode, toggleDarkMode, animate }) => {
+const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef })  => {
+
   const location = useLocation();
   const navRef = useRef();
 
@@ -19,10 +20,18 @@ const Navbar = ({ darkMode, toggleDarkMode, animate }) => {
 
   return (
     <nav
-      ref={navRef}
-      className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
+       ref={sectionRef || localRef}
+      className="sticky top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
     >
-      <Link to="/" className="text-xl font-bold dark:text-white">Matt</Link>
+    <Link to="/" className="flex items-center gap-2" aria-label="Home">
+  <img
+   src="/favIcon.png"
+  alt="Matt Adler Logo"
+  title="Matt Adler"
+    className="w-7 h-7 rounded-sm dark:invert hover:scale-105 transition-transform"
+  />
+</Link>
+
       <div className="flex items-center space-x-6">
         <Link 
           to="/about" 
@@ -53,6 +62,7 @@ const Navbar = ({ darkMode, toggleDarkMode, animate }) => {
             <SunIcon className="h-6 w-6" />
           )}
         </button>
+        
       </div>
     </nav>
   );

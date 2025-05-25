@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-export default function KaleidoscopeTechStack({ darkMode, className = '' }) {  
-  const ICON_SIZE = 60;
-  const CONTAINER_SIZE = 400;
-  const CENTER = CONTAINER_SIZE / 2;
-  const RADIUS = 140;
+export default function KaleidoscopeTechStack({ darkMode, className = '' }) {
+  const containerRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const techIcons = [
     { src: '/images/csharp.png', alt: 'C#' },
@@ -32,8 +30,21 @@ export default function KaleidoscopeTechStack({ darkMode, className = '' }) {
     'rgba(0, 190, 255, 0.3)',
     'rgba(255, 175, 0, 0.3)',
     'rgba(255, 0, 128, 0.3)',
-'rgba(0, 200, 80, 0.3)'
+    'rgba(0, 200, 80, 0.3)',
   ];
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ width, height });
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   useEffect(() => {
     const styleSheet = document.styleSheets[0];
@@ -43,7 +54,6 @@ export default function KaleidoscopeTechStack({ darkMode, className = '' }) {
         ? glowColors[i % glowColors.length].replace('0.3', '0.6')
         : glowColors[i % glowColors.length];
 
-      // Create glowing keyframes dynamically
       const ruleName = `@keyframes glowPulse-${i} {
         0%, 100% { box-shadow: 0 0 0px 0 ${glowColor}; }
         50% { box-shadow: 0 0 16px 8px ${glowColor}; }
@@ -56,10 +66,9 @@ export default function KaleidoscopeTechStack({ darkMode, className = '' }) {
         styleSheet.insertRule(ruleName, styleSheet.cssRules.length);
       }
 
-      // Animate transform organically (floating around center)
       const el = document.getElementById(`tech-icon-${i}`);
       if (el) {
-        const floatRange = 10 + Math.random() * 10; // 10–20px drift
+        const floatRange = 10 + Math.random() * 10;
         const angle = Math.random() * Math.PI * 2;
         const dx = floatRange * Math.cos(angle);
         const dy = floatRange * Math.sin(angle);
@@ -79,78 +88,76 @@ export default function KaleidoscopeTechStack({ darkMode, className = '' }) {
         );
       }
     });
-  }, [darkMode]);
+  }, [darkMode, dimensions]);
+
+  const CENTER_X = dimensions.width / 2;
+  const CENTER_Y = dimensions.height / 2;
+  const RADIUS = Math.min(dimensions.width, dimensions.height) / 2.2;
 
   return (
-  <section className={`mt-24 sm:mt-32 ${className}`}>
-    <div
-      className="relative mx-auto transition-colors duration-500 ease-in-out"
-      style={{ width: `${CONTAINER_SIZE}px`, height: `${CONTAINER_SIZE}px` }}
-    >
-      {/* Center icon */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-neutral-900 rounded-full shadow-md p-3 z-10 transition-colors duration-500 ease-in-out">
-        <svg
-          width="36"
-          height="36"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke={darkMode ? "#fff" : "#000"}
-          strokeWidth="2"
-          xmlns="http://www.w3.org/2000/svg"
-          className="transition-colors duration-500 ease-in-out"
-        >
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-      </div>
-
-      {/* Floating icons */}
-      {techIcons.map((icon, i) => {
-        const angle = (2 * Math.PI * i) / techIcons.length;
-        const x = CENTER + RADIUS * Math.cos(angle);
-        const y = CENTER + RADIUS * Math.sin(angle);
-
-        const rawSrc =
-          icon.alt === 'GitHub'
-            ? darkMode
-              ? icon.srcDark
-              : icon.srcLight
-            : icon.src;
-
-        const imgSrc = `${rawSrc}?v=${darkMode ? 'dark' : 'light'}`;
-
-        return (
-          <div
-            key={i}
-            id={`tech-icon-${i}`}
-            className="absolute w-[60px] h-[60px] bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center transition-colors duration-500 ease-in-out"
-            style={{
-              top: `${y}px`,
-              left: `${x}px`,
-              transform: 'translate(-50%, -50%)',
-              animation: `glowPulse-${i} 3s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 3}s`,
-            }}
+    <section className={`mt-24 sm:mt-32 ${className}`}>
+      <div
+        ref={containerRef}
+        className="relative mx-auto w-64 h-64 sm:w-80 sm:h-80 md:w-[400px] md:h-[400px] transition-colors duration-500 ease-in-out"
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-neutral-900 rounded-full shadow-md p-3 z-10 w-10 h-10 flex items-center justify-center transition-colors duration-500 ease-in-out">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={darkMode ? '#fff' : '#000'}
+            strokeWidth="2"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-6 h-6 transition-colors duration-500 ease-in-out"
           >
-            {icon.link ? (
-              <a href={icon.link} target="_blank" rel="noopener noreferrer">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="5" />
+          </svg>
+        </div>
+
+        {techIcons.map((icon, i) => {
+          const angle = (2 * Math.PI * i) / techIcons.length;
+          const x = CENTER_X + RADIUS * Math.cos(angle);
+          const y = CENTER_Y + RADIUS * Math.sin(angle);
+
+          const imgSrc =
+            icon.alt === 'GitHub'
+              ? darkMode
+                ? icon.srcDark
+                : icon.srcLight
+              : icon.src;
+
+          return (
+            <div
+              key={i}
+              id={`tech-icon-${i}`}
+              className="absolute w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white dark:bg-neutral-800 rounded-full flex items-center justify-center transition-colors duration-500 ease-in-out"
+              style={{
+                top: `${y}px`,
+                left: `${x}px`,
+                transform: 'translate(-50%, -50%)',
+                animation: `glowPulse-${i} 3s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 3}s`,
+              }}
+            >
+              {icon.link ? (
+                <a href={icon.link} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={imgSrc}
+                    alt={icon.alt}
+                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain transition duration-500 ease-in-out"
+                  />
+                </a>
+              ) : (
                 <img
                   src={imgSrc}
                   alt={icon.alt}
-                  className="w-9 h-9 object-contain transition duration-500 ease-in-out"
+                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain transition duration-500 ease-in-out"
                 />
-              </a>
-            ) : (
-              <img
-                src={imgSrc}
-                alt={icon.alt}
-                className="w-9 h-9 object-contain transition duration-500 ease-in-out"
-              />
-            )}
-          </div>
-        );
-      })}
-    </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }

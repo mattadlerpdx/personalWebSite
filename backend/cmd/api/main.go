@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"personalbackend/internal/handlers"
+
+	"github.com/mattadlerpdx/personalWebsite/backend/internal/config"
+	"github.com/mattadlerpdx/personalWebsite/backend/internal/handlers"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -31,6 +33,9 @@ func logMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
+
+	config.Load()
+
 	// === Router Setup ===
 	r := mux.NewRouter()
 
@@ -60,9 +65,9 @@ func main() {
 	})
 
 	// === CORS Configuration ===
-	allowedOrigins := []string{"http://localhost:3000"}
-	if os.Getenv("ENV") == "production" {
-		allowedOrigins = []string{"https://yourdomain.com"}
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"https://personal-frontend-service-684800965366.us-west1.run.app",
 	}
 
 	c := cors.New(cors.Options{

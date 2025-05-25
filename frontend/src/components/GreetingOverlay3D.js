@@ -3,51 +3,39 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { gsap } from 'gsap';
 
 function getResponsiveCameraRadius() {
-  return 2.5; // fixed distance for consistent scale
+  return 2.5;
 }
-
-
 
 function FlyoverCamera({ travelComplete, exiting }) {
   const { camera, size } = useThree();
   const tRef = useRef(0);
-  const radiusRef = useRef(getResponsiveCameraRadius(size.width, size.height));
+  const radiusRef = useRef(getResponsiveCameraRadius());
   const pitchUpRef = useRef(0);
   const pitchRightRef = useRef(0);
 
   useEffect(() => {
     camera.aspect = size.width / size.height;
-
-    // ✅ Slightly wider field of view on small screens
     camera.fov = size.width < 768 ? 65 : 75;
     camera.updateProjectionMatrix();
-
-    radiusRef.current = getResponsiveCameraRadius(size.width, size.height);
   }, [size, camera]);
 
   useFrame(() => {
     tRef.current += 0.002;
     const lon = tRef.current;
-
     const lat =
       size.width < 500 ? 0.5 :
-        size.width < 768 ? 0.6 :
-          size.width < 900 ? 0.68 :
-            0.75;
+      size.width < 768 ? 0.6 :
+      size.width < 900 ? 0.68 : 0.75;
 
+    if (exiting.current) {
+      radiusRef.current += 0.008;
+      if (pitchUpRef.current < 0.8) {
+        pitchUpRef.current += 0.0012;
+        pitchRightRef.current += 0.001;
+      }
+    }
 
-if (exiting.current) {
-  radiusRef.current += 0.008;
-
-  // ⏩ Increase these values to speed up the pan-up effect
-  if (pitchUpRef.current < 0.8) {
-    pitchUpRef.current += 0.0012;  // was 0.0004
-    pitchRightRef.current += 0.001; // was 0.0003
-  }
-}
-
-
-const r = getResponsiveCameraRadius(size.width, size.height);
+    const r = radiusRef.current;
     const x = r * Math.cos(lat) * Math.cos(lon);
     const y = r * Math.sin(lat);
     const z = r * Math.cos(lat) * Math.sin(lon);
@@ -67,13 +55,9 @@ const r = getResponsiveCameraRadius(size.width, size.height);
 
 function StaticSphere() {
   const { size } = useThree();
-
-const baseWidth = 900;
-const slope = 0.0004;
-const scale = Math.min(1.18, +(1 + (baseWidth - size.width) * slope).toFixed(3));
-
-
-
+  const baseWidth = 900;
+  const slope = 0.0004;
+  const scale = Math.max(1, Math.min(1.18, +(1 + (baseWidth - size.width) * slope)));
   return (
     <mesh scale={[scale, scale, scale]}>
       <sphereGeometry args={[2, 64, 64]} />
@@ -121,16 +105,22 @@ export default function GreetingOverlay3D({ onComplete }) {
       ref={overlayRef}
       className="fixed inset-0 z-50 bg-black text-white transition-opacity duration-1000"
     >
-      <Canvas className="w-full h-full">
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <StaticSphere />
-        <FlyoverCamera travelComplete={travelComplete} exiting={exiting} />
-      </Canvas>
+      <div className="relative w-full min-h-screen">
+        <Canvas
+          className="absolute inset-0"
+          dpr={[1, 2]}
+          style={{ width: '100vw', height: '100vh' }}
+        >
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+          <StaticSphere />
+          <FlyoverCamera travelComplete={travelComplete} exiting={exiting} />
+        </Canvas>
+      </div>
 
       <div
         ref={textRef}
-        className="absolute inset-0 flex flex-col justify-center items-center text-center text-3xl md:text-4xl font-semibold tracking-tight px-4"
+        className="absolute inset-0 flex flex-col justify-center items-center text-center text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight px-4"
       >
         <p>Hello, I'm Matt —</p>
         <p>engineer, system builder, explorer.</p>

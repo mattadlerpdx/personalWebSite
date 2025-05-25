@@ -1,5 +1,23 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./public/index.html",
+    "./src/**/*.{js,jsx,ts,tsx}"
+  ],
+    safelist: [
+    'text-white',
+    'dark:text-white',
+    'hover:underline',
+    'bg-blue-600',
+    'bg-green-600',
+    'text-3xl',
+    'gap-2',
+    'flex',
+    'items-center',
+    'justify-center',
+    'rounded-lg',
+    'animate-bounce',
+  ],
   darkMode: 'class',
   theme: {
     extend: {
@@ -26,5 +44,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography') // Optional: for better layout/text default behavior
+  ],
 };
+

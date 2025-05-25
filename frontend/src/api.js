@@ -1,43 +1,48 @@
-// Using relative URLs since we have proxy set up
+const API_BASE_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'https://personal-backend-service-684800965366.us-west1.run.app'; 
+
+const fetchJSON = async (endpoint, options = {}) => {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+  if (!response.ok) {
+    const msg = await response.text();
+    throw new Error(`Request failed: ${response.status} ${msg}`);
+  }
+  return await response.json();
+};
+
 export const fetchProjects = async () => {
-    try {
-        const response = await fetch('/projects');
-        if (!response.ok) throw new Error('Failed to fetch projects');
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching projects:', error);
-        return [];
-    }
+  try {
+    return await fetchJSON('/projects');
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return [];
+  }
 };
 
 export const fetchAbout = async () => {
-    try {
-        const response = await fetch('/about');
-        if (!response.ok) throw new Error('Failed to fetch about info');
-        return await response.json();
-    } catch (error) {
-        console.error('Error fetching about info:', error);
-        return null;
-    }
+  try {
+    return await fetchJSON('/about');
+  } catch (error) {
+    console.error('Error fetching about info:', error);
+    return null;
+  }
 };
 
 export const sendContactForm = async (formData) => {
-    try {
-        const response = await fetch('/contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
-        if (!response.ok) throw new Error('Failed to send contact form');
-        return await response.json();
-    } catch (error) {
-        console.error('Error sending contact form:', error);
-        throw error;
-    }
+  try {
+    return await fetchJSON('/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+  } catch (error) {
+    console.error('Error sending contact form:', error);
+    throw error;
+  }
 };
 
-export const getResumeUrl = () => {
-    return '/resume';
-};
+export const getResumeUrl = () => '/resume.pdf';

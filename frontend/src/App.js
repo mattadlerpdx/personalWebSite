@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import clsx from 'clsx';
+import Footer from './components/Footer';
 
 import Navbar from './components/Navbar';
 import AppRoutes from './AppRoutes';
@@ -13,21 +15,30 @@ gsap.registerPlugin(ScrollTrigger);
 function App() {
   const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true');
   const [showGreeting, setShowGreeting] = useState(true);
-  const [contentVisible, setContentVisible] = useState(false); // NEW
+  const [contentVisible, setContentVisible] = useState(false);
+  
+  const navBarRef = useRef(null);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const handleGreetingComplete = () => {
     setShowGreeting(false);
-    // Wait a brief moment before animating in content
-    setTimeout(() => setContentVisible(true), 300); // slight delay
+    setTimeout(() => {
+      setContentVisible(true);
+
+    // ✅ ScrollTrigger.refresh() — Final fix goes right here
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100); // short delay ensures layout + refs settle
+    });
+
+    }, 300);
   };
 
   return (
@@ -36,14 +47,17 @@ function App() {
         <GreetingOverlay3D onComplete={handleGreetingComplete} />
       ) : (
         <div
-          className={`min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300 ${
-            contentVisible ? 'opacity-100' : 'opacity-0'
-          } transition-opacity duration-1000 ease-in-out`}
+          className={clsx(
+            "bg-white text-black dark:bg-black dark:text-white",
+            "transition-colors duration-300 transition-opacity duration-1000 ease-in-out",
+            contentVisible ? "opacity-100" : "opacity-0"
+          )}
         >
-          <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-          <div className="pt-16">
-            <AppRoutes />
-          </div>
+          <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} sectionRef={navBarRef} />
+          <main className="pt-16">
+            <AppRoutes darkMode={darkMode} triggerRef={navBarRef} />
+          </main>
+           <Footer darkMode={darkMode}/>
         </div>
       )}
     </Router>
