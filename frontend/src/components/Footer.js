@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="text-center py-10 mt-20">
       <div className="flex justify-center space-x-8 text-base font-medium text-gray-600 dark:text-gray-300">
         <Link to="/projects" className="hover:text-black dark:hover:text-white transition">
-          View All Projects
+          Projects
         </Link>
         <a
           href={getResumeUrl()}
@@ -15,10 +15,10 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="hover:text-black dark:hover:text-white transition"
         >
-          Download Resume
+          Resume
         </a>
         <Link to="/contact" className="hover:text-black dark:hover:text-white transition">
-          Contact Me
+          Contact
         </Link>
       </div>
 

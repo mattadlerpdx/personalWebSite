@@ -1,68 +1,44 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import useScrollTop from '../hooks/useScrollTop';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero({ darkMode }) {
   const sectionRef = useRef(null);
-  const atTop = useScrollTop();
+  const [showChevron, setShowChevron] = useState(true);
 
   useEffect(() => {
     const words = gsap.utils.toArray('.word');
-    gsap.set(words, { autoAlpha: 0.2, color: '#9ca3af' });
-
     const color = darkMode ? '#ffffff' : '#000000';
 
-    if (window.innerHeight === document.body.scrollHeight) {
-      gsap.to(words, {
-        autoAlpha: 1,
-        color,
-        stagger: 0.2,
-        ease: 'none',
-        duration: 1,
-        delay: 0.4,
-      });
-    } else {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=100%',
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
+    gsap.set(words, { autoAlpha: 0.2, color: '#9ca3af' });
+
+    const animation = gsap.to(words, {
+      autoAlpha: 1,
+      color,
+      stagger: 0.2,
+      ease: 'none',
+      duration: 1,
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '+=100%',
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          setShowChevron(self.progress < 0.8);
         },
-      });
+      }
+    });
 
-      tl.to(words, {
-        autoAlpha: 1,
-        color,
-        stagger: 0.2,
-        ease: 'none',
-        duration: 1,
-      });
-      ScrollTrigger.refresh();
-
-
-      return () => {
-        tl.scrollTrigger?.kill();
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      };
-    }
-  }, [darkMode]);
-
-  useEffect(() => {
-    if (sectionRef.current) {
-      gsap.fromTo(
-        sectionRef.current,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 }
-      );
-    }
+    return () => {
+      animation.scrollTrigger?.kill();
+      animation.kill();
+    };
   }, [darkMode]);
 
   const sentence = [
@@ -79,20 +55,20 @@ export default function Hero({ darkMode }) {
           {sentence.map((word, i) => (
             <span
               key={i}
-              className="word text-gray-400"
-              style={{ visibility: 'hidden' }}
+              className="word inline-block"
+              style={{ opacity: 0 }}
             >
               {word}
             </span>
           ))}
         </h1>
 
-        {atTop && (
-          <ChevronDownIcon
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 w-10 h-10 text-gray-400 dark:text-white animate-bounce z-50 transition-colors ease-in-out"
-            aria-hidden="true"
-          />
-        )}
+        <ChevronDownIcon
+          className={`absolute bottom-10 left-1/2 -translate-x-1/2 w-10 h-10 text-gray-400 dark:text-white animate-bounce z-50 transition-opacity duration-300 ease-in-out ${
+            showChevron ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+          aria-hidden="true"
+        />
       </div>
     </section>
   );

@@ -13,7 +13,7 @@ export default function About() {
   if (!about) return <p className="text-center text-gray-500 dark:text-gray-400">Loading...</p>;
 
   return (
-    <section className="transition-colors duration-300">
+    <section className="w-full min-h-screen overflow-auto transition-colors duration-300 px-4">
       <div className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-md p-8 md:p-12 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
 
         {/* Profile Image */}

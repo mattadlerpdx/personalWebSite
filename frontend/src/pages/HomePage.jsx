@@ -7,18 +7,22 @@ import Projects from '../components/Projects';
 import Footer from '../components/Footer';
 
 const PageSection = ({ children, className = '' }) => (
-  <section className={`px-4 sm:px-6 lg:px-8 py-40 md:py-56  ${className}`}>
-    <div className="max-w-screen-xl mx-auto w-full">{children}</div>
+  <section
+    className={`w-full bg-white dark:bg-black px-4 sm:px-6 lg:px-8 py-40 md:py-56 transition-colors duration-300 ${className}`}
+  >
+    <div className="max-w-screen-xl mx-auto w-full bg-white dark:bg-black transition-colors duration-300">
+      {children}
+    </div>
   </section>
 );
 
-export default function HomePage({ darkMode, triggerRef}) {
+export default function HomePage({ darkMode, triggerRef }) {
   return (
 
     <div className="bg-white dark:bg-black text-black dark:text-white">
 
       {/* Hero section (handles its own scroll/pin) */}
-      <Hero darkMode={darkMode}  triggerRef={triggerRef}/>
+      <Hero darkMode={darkMode} triggerRef={triggerRef} />
 
       {/* ABOUT Section */}
       <PageSection >
