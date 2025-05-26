@@ -5,16 +5,16 @@ import About from '../components/About';
 import KaleidoscopeTechStack from '../components/KaleidoscopeTechStack';
 import Projects from '../components/Projects';
 import Footer from '../components/Footer';
-
 const PageSection = ({ children, className = '' }) => (
   <section
-    className={`w-full bg-white dark:bg-black px-4 sm:px-6 lg:px-8 py-40 md:py-56 transition-colors duration-300 ${className}`}
+    className={`w-full bg-white dark:bg-black px-4 sm:px-6 lg:px-8 py-16 md:py-24 transition-colors duration-300 ${className}`}
   >
     <div className="max-w-screen-xl mx-auto w-full bg-white dark:bg-black transition-colors duration-300">
       {children}
     </div>
   </section>
 );
+
 
 export default function HomePage({ darkMode, triggerRef }) {
   return (

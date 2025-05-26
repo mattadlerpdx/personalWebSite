@@ -5,7 +5,7 @@ import KaleidoscopeTechStack from '../components/KaleidoscopeTechStack';
 export default function AboutPage({ darkMode }) {
   return (
     <div
-      className={`w-full min-h-screen overflow-y-auto transition-colors duration-500 ${
+      className={`w-full transition-colors duration-500 ${
         darkMode ? 'bg-black text-white' : 'bg-white text-black'
       }`}
     >
@@ -20,4 +20,3 @@ export default function AboutPage({ darkMode }) {
     </div>
   );
 }
-
