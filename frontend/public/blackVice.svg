@@ -1,0 +1,19 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="768" viewBox="0 0 768 768">
+  <defs>
+    <linearGradient id="rainbowMiami" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6ec7"/>    <!-- Hot Pink -->
+      <stop offset="16%" stop-color="#da70d6"/>   <!-- Orchid -->
+      <stop offset="33%" stop-color="#7b68ee"/>   <!-- Medium Slate Blue -->
+      <stop offset="50%" stop-color="#5ee6eb"/>   <!-- Aqua Blue -->
+      <stop offset="66%" stop-color="#20c997"/>   <!-- Mint Green -->
+      <stop offset="83%" stop-color="#ffe066"/>   <!-- Pale Yellow -->
+      <stop offset="100%" stop-color="#ff6ec7"/>  <!-- Back to Hot Pink -->
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#rainbowMiami)" rx="80" ry="80"/>
+  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+        font-family="Brush Script MT, cursive" font-size="220"
+        fill="black" font-weight="bold"
+        transform="rotate(-20, 384, 384)">MA</text>
+</svg>
