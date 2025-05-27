@@ -25,7 +25,7 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef })  => {
     >
     <Link to="/" className="flex items-center gap-2" aria-label="Home">
   <img
-   src="/logoB.svg"
+   src="/centeredSvg.svg"
   alt="Matt Adler Logo"
   title="Matt Adler"
     className="w-7 h-7 rounded-sm hover:scale-105 transition-transform"
