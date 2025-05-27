@@ -33,20 +33,24 @@ function App() {
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
-  // Handle greeting completion
-  const handleGreetingComplete = () => {
-    setShowGreeting(false);
+ const handleGreetingComplete = () => {
+  setShowGreeting(false);
 
-    setTimeout(() => {
-      setContentVisible(true);
+  setTimeout(() => {
+    setContentVisible(true);
 
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          ScrollTrigger.refresh();
-        }, 100); // allow layout to settle
-      });
-    }, 300);
-  };
+    requestAnimationFrame(() => {
+      // Safely nudge the scroll position to trigger ScrollTrigger
+      window.scrollTo({ top: 200, behavior: 'instant' });
+
+      // Let layout settle and refresh ScrollTrigger
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+        ScrollTrigger.update();
+      }, 100);
+    });
+  }, 300);
+};
 
   // Refresh ScrollTrigger on resize
   useEffect(() => {
