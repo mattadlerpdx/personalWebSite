@@ -50,8 +50,9 @@ export default function Hero({ darkMode, triggerRef }) {
   return (
 <section
   ref={sectionRef}
-  className="h-screen md:h-[90vh] flex justify-center items-center px-4 md:px-12 pt-16 md:pt-24 relative overflow-hidden transition-colors duration-500 ease-in-out"
+  className="h-[70vh] sm:min-h-screen pt-20 pb-12 flex justify-center items-center px-4 sm:px-8 ..."
 >
+
       <div className="max-w-screen-xl mx-auto w-full text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-wrap gap-2 justify-center">
           {sentence.map((word, i) => (
