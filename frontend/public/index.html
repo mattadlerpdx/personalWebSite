@@ -2,24 +2,35 @@
 <html lang="en">
   <head>
     <script>
-  (function() {
-    const stored = localStorage.getItem('darkMode');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (stored === 'true' || (stored === null && prefersDark)) {
-      document.documentElement.classList.add('dark');
-    }
-  })();
-</script>
+      (function () {
+        const stored = localStorage.getItem('darkMode');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'true' || (stored === null && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
 
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/favIcon.png" />
+
+    <!-- Metadata -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Personal portfolio powered by React and Tailwind CSS." />
-    <title>Matt Adler | Portfolio</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="description" content="Explore Matt Adler's full-stack portfolio: React, AI, and cloud engineering with clean UX and modern architecture." />
+
+    <!-- SEO + Share Preview -->
+    <meta property="og:title" content="Matt Adler | Software Engineer" />
+    <meta property="og:description" content="Modern full-stack development portfolio: React, cloud, AI, and more." />
+    <meta property="og:url" content="https://MattAdler.dev" />
+
+    <!-- Title -->
+    <title>Matt Adler | Software Engineer</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript to run this app</noscript>
     <div id="root"></div>
   </body>
 </html>

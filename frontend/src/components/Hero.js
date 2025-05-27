@@ -67,12 +67,15 @@ export default function Hero({ darkMode, triggerRef }) {
         </h1>
 
       </div>
-        <ChevronDownIcon
-        className={`absolute bottom-4 left-1/2 -translate-x-1/2 w-10 h-10 text-gray-400 dark:text-white animate-bounce z-50 transition-opacity duration-300 ease-in-out ${
-          showChevron ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        aria-hidden="true"
-      />
+    {showChevron && (
+  <div className="absolute bottom-4 w-full flex justify-center z-50">
+    <ChevronDownIcon
+      className="w-10 h-10 text-gray-400 dark:text-white animate-bounce transition-opacity duration-300 ease-in-out"
+      aria-hidden="true"
+    />
+  </div>
+)}
+
     </section>
   );
 }
