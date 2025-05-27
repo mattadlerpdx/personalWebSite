@@ -24,7 +24,7 @@ export default function Footer() {
 
       <div className="mt-10 flex justify-center items-center gap-2">
         <img
-          src="/favIcon.png"
+          src="/maSvg.svg"
           alt="Site Logo"
           className="w-5 h-5 rounded-sm dark:invert"
         />
