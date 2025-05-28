@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchAbout } from '../api';
+import KaleidoscopeTechStack from '../components/KaleidoscopeTechStack';
 
-export default function About() {
+export default function About({ darkMode }) {
   const [about, setAbout] = useState(null);
 
   useEffect(() => {
@@ -13,7 +14,8 @@ export default function About() {
   if (!about) return <p className="text-center text-gray-500 dark:text-gray-400">Loading...</p>;
 
   return (
-    <section className="w-full px-4 mb-16 transition-colors duration-300">
+    <section className="w-full px-4 pb-24 transition-colors duration-300">
+      {/* About Container */}
       <div className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl shadow-md p-8 md:p-12 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
         {/* Profile Image */}
         <div className="flex-shrink-0">
@@ -26,43 +28,55 @@ export default function About() {
 
         {/* Text Content */}
         <div className="w-full text-center md:text-left">
-          <h2 className="text-3xl font-bold mb-1">{about.name}</h2>
-          <h3 className="text-xl text-blue-400 dark:text-blue-300 mb-4">{about.title}</h3>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-1 text-gray-800 dark:text-gray-100">{about.name}</h2>
+          <h3 className="text-xl sm:text-2xl dark:text-white light:text-black mb-4">{about.title}</h3>
 
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg max-w-prose mx-auto md:mx-0 mb-6">
+          <p className="text-base sm:text-lg md:text-xl dark:text-white light:text-black dark:text-white light:text-black leading-relaxed max-w-prose mx-auto md:mx-0">
             {about.description}
           </p>
+        </div>
+      </div>
 
-          {/* Skills Section */}
-          <div className="mt-8 text-gray-700 dark:text-gray-300 text-sm sm:text-base">
-            <h4 className="text-lg font-semibold mb-4 text-center sm:text-left">Skills</h4>
-            <div className="grid sm:grid-cols-3 gap-6 text-center sm:text-left">
-              <div>
-                <h5 className="font-medium mb-2">Languages</h5>
-                <p className="leading-relaxed">
-                  Go<br />
-                  C#<br />
-                  JavaScript<br />
-                  SQL
-                </p>
-              </div>
-              <div>
-                <h5 className="font-medium mb-2">Frameworks & Tools</h5>
-                <p className="leading-relaxed">
-                  React.js<br />
-                  Docker<br />
-                  CI/CD
-                </p>
-              </div>
-              <div>
-                <h5 className="font-medium mb-2">Cloud & APIs</h5>
-                <p className="leading-relaxed">
-                  Google Cloud<br />
-                  OpenAI API<br />
-                  GitHub/GitLab
-                </p>
-              </div>
-            </div>
+      {/* Skills Section */}
+      <div className="max-w-6xl mx-auto pt-24 px-4 sm:px-6">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center dark:text-white light:text-black">
+          Skills
+        </h2>
+
+        <p className="text-base sm:text-lg md:text-xl dark:text-white light:text-black leading-relaxed mb-12 max-w-4xl mx-auto text-center">
+          With a foundation in systems programming and real-world experience building a CGO WebSocket library at BlackBerry,
+          I’ve since expanded into full-stack development—modernizing .NET platforms, building cloud-native services,
+          and integrating AI tools like OpenAI’s API. I'm especially passionate about natural language processing,
+          large language models, and scalable, AI-driven architectures.
+        </p>
+
+        <KaleidoscopeTechStack darkMode={darkMode} />
+
+        <div className="grid sm:grid-cols-3 gap-10 text-center dark:text-white light:text-black mt-24 sm:mt-32 max-w-5xl mx-auto">
+          <div>
+            <h5 className="text-lg sm:text-xl font-semibold mb-3">Languages</h5>
+            <ul className="space-y-1 leading-relaxed">
+              <li>Go</li>
+              <li>C#</li>
+              <li>JavaScript</li>
+              <li>SQL</li>
+            </ul>
+          </div>
+          <div>
+            <h5 className="text-lg sm:text-xl font-semibold mb-3">Frameworks & Tools</h5>
+            <ul className="space-y-1 leading-relaxed">
+              <li>React.js</li>
+              <li>Docker</li>
+              <li>CI/CD</li>
+            </ul>
+          </div>
+          <div>
+            <h5 className="text-lg sm:text-xl font-semibold mb-3">Cloud & APIs</h5>
+            <ul className="space-y-1 leading-relaxed">
+              <li>Google Cloud</li>
+              <li>OpenAI API</li>
+              <li>GitHub / GitLab</li>
+            </ul>
           </div>
         </div>
       </div>

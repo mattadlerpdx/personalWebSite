@@ -1,37 +1,44 @@
-// HomePage.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import KaleidoscopeTechStack from '../components/KaleidoscopeTechStack';
 import Projects from '../components/Projects';
-
+import Footer from '../components/Footer';
 const PageSection = ({ children, className = '' }) => (
   <section
-    className={`w-full bg-white dark:bg-black px-4 sm:px-6 lg:px-8 py-16 md:py-24 transition-all duration-500 ease-in-out ${className}`}
+    className={`w-full bg-white dark:bg-black px-4 sm:px-6 lg:px-8 py-16 md:py-24 transition-colors duration-300 ${className}`}
   >
-    <div className="max-w-screen-xl mx-auto w-full">
+    <div className="max-w-screen-xl mx-auto w-full bg-white dark:bg-black transition-colors duration-300">
       {children}
     </div>
   </section>
 );
 
-export default function HomePage({ darkMode }) {
+
+
+export default function HomePage({ darkMode, triggerRef }) {
   return (
+
     <div className="bg-white dark:bg-black text-black dark:text-white">
-      <Hero darkMode={darkMode} />
 
-      {/* About fades in based on scroll position */}
-      <PageSection>
-        <About />
+      {/* Hero section (handles its own scroll/pin) */}
+      <Hero darkMode={darkMode} triggerRef={triggerRef} />
+
+      {/* ABOUT Section */}
+      <PageSection className="pt-16">
+        <About darkMode={darkMode}/>
       </PageSection>
-
-      <PageSection>
+<PageSection>
         <KaleidoscopeTechStack darkMode={darkMode} />
-      </PageSection>
-
+</PageSection>
+      {/* PROJECTS Section */}
       <PageSection>
         <Projects darkMode={darkMode} />
       </PageSection>
+
+
+
     </div>
   );
 }

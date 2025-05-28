@@ -6,12 +6,10 @@ function getResponsiveCameraRadius() {
   return 2.5;
 }
 
-function FlyoverCamera({ travelComplete, exiting }) {
+function FlyoverCamera() {
   const { camera, size } = useThree();
   const tRef = useRef(0);
-  const radiusRef = useRef(getResponsiveCameraRadius());
-  const pitchUpRef = useRef(0);
-  const pitchRightRef = useRef(0);
+  const radius = getResponsiveCameraRadius();
 
   useEffect(() => {
     camera.aspect = size.width / size.height;
@@ -27,15 +25,7 @@ function FlyoverCamera({ travelComplete, exiting }) {
       size.width < 768 ? 0.6 :
       size.width < 900 ? 0.68 : 0.75;
 
-    if (exiting.current) {
-      radiusRef.current += 0.008;
-      if (pitchUpRef.current < 0.8) {
-        pitchUpRef.current += 0.0012;
-        pitchRightRef.current += 0.001;
-      }
-    }
-
-    const r = radiusRef.current;
+    const r = radius;
     const x = r * Math.cos(lat) * Math.cos(lon);
     const y = r * Math.sin(lat);
     const z = r * Math.cos(lat) * Math.sin(lon);
@@ -44,7 +34,7 @@ function FlyoverCamera({ travelComplete, exiting }) {
 
     const lookAheadLon = lon + 0.08;
     const lookX = r * Math.cos(lat) * Math.cos(lookAheadLon);
-    const lookY = r * Math.sin(lat) + pitchUpRef.current;
+    const lookY = r * Math.sin(lat);
     const lookZ = r * Math.cos(lat) * Math.sin(lookAheadLon);
 
     camera.lookAt(lookX, lookY, lookZ);
@@ -67,35 +57,39 @@ function StaticSphere() {
 }
 
 export default function GreetingOverlay3D({ onComplete }) {
-  const textRef = useRef();
   const overlayRef = useRef();
-  const travelComplete = useRef(false);
-  const exiting = useRef(false);
+  const contentRef = useRef();
+  const textRef = useRef();
+  const hasFadedOut = useRef(false); // 🛡 Prevents double-invocation
 
+  // Shared function to fade out content and call onComplete
+  const triggerFadeOut = () => {
+    if (hasFadedOut.current) return;
+    hasFadedOut.current = true;
+    console.log("pressed!")
+    gsap.to(contentRef.current, {
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power2.inOut',
+      onComplete: onComplete,
+    });
+  };
+
+  // Timed animation sequence
   useEffect(() => {
     const tl = gsap.timeline();
 
     tl.fromTo(
       textRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' }
+      { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
     )
       .to(
         textRef.current,
-        { opacity: 0, y: -20, duration: 1.2, delay: 1.5, ease: 'power2.inOut' }
+        { opacity: 0, y: -20, duration: 1, ease: 'power2.inOut' },
+        '+=0.8'
       )
-      .add(() => {
-        travelComplete.current = true;
-        exiting.current = true;
-      })
-      .to(
-        overlayRef.current,
-        { opacity: 0, duration: 1.5, ease: 'power2.inOut' },
-        "+=0.3"
-      )
-      .add(() => {
-        onComplete();
-      });
+      .add(triggerFadeOut, '-=0.3');
 
     return () => tl.kill();
   }, [onComplete]);
@@ -103,28 +97,36 @@ export default function GreetingOverlay3D({ onComplete }) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 bg-black text-white transition-opacity duration-1000"
+      onClick={triggerFadeOut}
+      className="fixed inset-0 z-50 bg-black text-white cursor-pointer"
     >
-      <div className="relative w-full min-h-screen">
-        <Canvas
-          className="absolute inset-0"
-          dpr={[1, 2]}
-          style={{ width: '100vw', height: '100vh' }}
-        >
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <StaticSphere />
-          <FlyoverCamera travelComplete={travelComplete} exiting={exiting} />
-        </Canvas>
-      </div>
-
       <div
-        ref={textRef}
-        className="absolute inset-0 flex flex-col justify-center items-center text-center text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight px-4"
+        ref={contentRef}
+        className="absolute inset-0 w-full h-full"
       >
-        <p>Hello, I'm Matt —</p>
-        <p>engineer, system builder, explorer.</p>
+        <div className="relative w-full min-h-screen">
+          <Canvas
+            className="absolute inset-0"
+            dpr={[1, 2]}
+            style={{ width: '100vw', height: '100vh' }}
+          >
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <StaticSphere />
+            <FlyoverCamera />
+          </Canvas>
+        </div>
+
+        <div
+          ref={textRef}
+          className="absolute inset-0 flex flex-col justify-center items-center text-center text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight px-4"
+        >
+          <p>Hello, I'm Matt —</p>
+          <p>engineer, system builder, explorer.</p>
+          <p className="mt-4 text-sm text-white/50">(click to skip)</p>
+        </div>
       </div>
     </div>
   );
 }
+

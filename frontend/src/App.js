@@ -33,21 +33,20 @@ function App() {
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
- const handleGreetingComplete = () => {
-  setShowGreeting(false);
+  // Handle greeting completion
+  const handleGreetingComplete = () => {
+    setShowGreeting(false);
 
-  setTimeout(() => {
-    setContentVisible(true);
+    setTimeout(() => {
+      setContentVisible(true);
 
-    requestAnimationFrame(() => {
-      // Let layout settle and refresh ScrollTrigger
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-        ScrollTrigger.update();
-      }, 100);
-    });
-  }, 300);
-};
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100); // allow layout to settle
+      });
+    }, 300);
+  };
 
   // Refresh ScrollTrigger on resize
   useEffect(() => {
@@ -72,9 +71,10 @@ function App() {
           )}
         >
           <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} sectionRef={navBarRef} />
-          <main className="pt-16 w-full">
+          <main className="flex-grow flex flex-col w-full">
             <AppRoutes darkMode={darkMode} triggerRef={navBarRef} />
           </main>
+
           <Footer darkMode={darkMode} />
         </div>
       )}
