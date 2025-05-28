@@ -40,9 +40,6 @@ function App() {
     setContentVisible(true);
 
     requestAnimationFrame(() => {
-      // Safely nudge the scroll position to trigger ScrollTrigger
-      //window.scrollTo({ top: 200, behavior: 'instant' });
-
       // Let layout settle and refresh ScrollTrigger
       setTimeout(() => {
         ScrollTrigger.refresh();
