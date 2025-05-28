@@ -6,12 +6,12 @@ export default function Hero({ darkMode }) {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const sentence = [
-    'Building', 'the', 'future,', 'one', 'line', 'of', 'code', 'at', 'a', 'time.'
+    'Shaping', 'the', 'future,', 'one', 'line', 'of', 'code', 'at', 'a', 'time.'
   ];
 
   useEffect(() => {
     const handleScroll = () => {
-      const maxScroll = 350;
+      const maxScroll = 400;
       const currentScroll = window.scrollY;
       const progress = Math.min(1, currentScroll / maxScroll);
       setScrollProgress(progress);
@@ -34,7 +34,7 @@ export default function Hero({ darkMode }) {
           {sentence.map((word, i) => {
             const fillSpeed = sentence.length + 4;
             const wordProgress = scrollProgress * fillSpeed - i;
-            const opacity = Math.min(1, Math.max(0.2, wordProgress));
+            const opacity = Math.min(1, Math.max(0.3, wordProgress));
             const color = darkMode ? '#ffffff' : '#000000';
             return (
               <span
