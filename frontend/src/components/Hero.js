@@ -22,7 +22,7 @@ export default function Hero({ darkMode, triggerRef }) {
       ease: 'none',
       scrollTrigger: {
         trigger: sectionRef.current,
-        start: 'top top',
+        start: 'top+=100',
         end: 'bottom+=200', // enough scroll space, not bloated
         pin: true,
         scrub: 1,

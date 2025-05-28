@@ -21,7 +21,7 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef })  => {
   return (
     <nav
        ref={sectionRef || localRef}
-      className="sticky top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
+      className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
     >
     <Link to="/" className="flex items-center gap-2" aria-label="Home">
   <img
