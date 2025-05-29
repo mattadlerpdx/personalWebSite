@@ -28,7 +28,7 @@ useEffect(() => {
       scrub: 1,
       anticipatePin: 1,
       onUpdate: (self) => {
-        setShowChevron(self.progress < 0.6);
+       setShowChevron(self.progress < 0.2);
       },
     },
   });
@@ -38,7 +38,6 @@ useEffect(() => {
     tl.kill();
   };
 }, [darkMode]);
-
 
   const sentence = [
     'Turning', 'ideas', 'into', 'reality.', 'One', 'line', 'of', 'code', 'at', 'a', 'time...'
@@ -62,7 +61,18 @@ useEffect(() => {
           </span>
         ))}
       </h1>
+
     </div>
+
+     {showChevron && (
+  <div className="absolute bottom-4 w-full flex justify-center z-50">
+    <ChevronDownIcon
+      className="w-10 h-10 text-gray-400 dark:text-white animate-bounce transition-opacity duration-300 ease-in-out"
+      aria-hidden="true"
+    />
+  </div>
+)}
+
   </div>
 </section>
 
