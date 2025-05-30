@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import AppRoutes from './AppRoutes';
 import GreetingOverlay3D from './components/GreetingOverlay3D';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop'; 
 
 import './index.css';
 
@@ -23,7 +24,6 @@ function App() {
   const [contentVisible, setContentVisible] = useState(false);
   const navBarRef = useRef(null);
 
-  // Set up dark mode on load
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -33,27 +33,25 @@ function App() {
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
-const handleGreetingComplete = () => {
-  setShowGreeting(false);
+  const handleGreetingComplete = () => {
+    setShowGreeting(false);
 
-  setTimeout(() => {
-    setContentVisible(true);
+    setTimeout(() => {
+      setContentVisible(true);
 
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        window.scrollTo({
-          top: 50, // Feel free to adjust this value!
-          behavior: 'smooth',
-        });
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          window.scrollTo({
+            top: 50,
+            behavior: 'smooth',
+          });
 
-        ScrollTrigger.refresh();
-      }, 100);
-    });
-  }, 300);
-};
+          ScrollTrigger.refresh();
+        }, 100);
+      });
+    }, 300);
+  };
 
-
-  // Refresh ScrollTrigger on resize
   useEffect(() => {
     const handleResize = () => ScrollTrigger.refresh();
     window.addEventListener('resize', handleResize);
@@ -75,12 +73,11 @@ const handleGreetingComplete = () => {
             contentVisible ? 'opacity-100' : 'opacity-0'
           )}
         >
+          <ScrollToTop /> {/* ✅ Added here! */}
           <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} sectionRef={navBarRef} />
           <main className="flex-grow flex flex-col w-full pt-20 sm:pt-24">
             <AppRoutes darkMode={darkMode} triggerRef={navBarRef} />
           </main>
-
-
           <Footer darkMode={darkMode} />
         </div>
       )}

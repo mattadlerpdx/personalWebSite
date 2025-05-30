@@ -13,7 +13,7 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
       gsap.fromTo(
         navRef.current,
         { y: -80, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power2.out', delay: 0.1 }
+        { y: 0, opacity: 1, duration: 1, ease: 'power2.out', delay: 0.01 }
       );
     }
   }, [animate]);
@@ -34,7 +34,7 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
       </Link>
 
       {/* Hamburger Icon for mobile */}
-      <div className="flex items-center sm:hidden">
+      <div className="flex-col items-end sm:hidden">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="p-2 text-black dark:text-white"
@@ -78,44 +78,48 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
       </div>
 
       {/* Mobile Dropdown Menu */}
-      <div
-        className={`absolute top-full left-0 w-full bg-white dark:bg-black shadow-md sm:hidden flex flex-col items-center space-y-4 py-4 transition-all duration-300 ease-in-out ${isMenuOpen
-            ? 'opacity-100 translate-y-0 pointer-events-auto'
-            : 'opacity-0 -translate-y-4 pointer-events-none'
-          }`}
-      >
+ <div
+  className={`absolute top-full left-0 right-0 bg-white dark:bg-black shadow-md sm:hidden flex flex-col items-end space-y-4 py-4 w-full transition-all duration-300 ease-in-out ${
+    isMenuOpen
+      ? 'opacity-100 translate-y-0 pointer-events-auto'
+      : 'opacity-0 -translate-y-4 pointer-events-none'
+  }`}
+>
+
         <Link
           to="/about"
           onClick={() => setIsMenuOpen(false)}
-          className="hover:underline dark:text-white"
+          className="hover:underline dark:text-white w-full text-right px-4"
         >
           About
         </Link>
         <Link
           to="/projects"
           onClick={() => setIsMenuOpen(false)}
-          className="hover:underline dark:text-white"
+          className="hover:underline dark:text-white w-full text-right px-4"
         >
           Projects
         </Link>
         <Link
           to="/contact"
           onClick={() => setIsMenuOpen(false)}
-          className="hover:underline dark:text-white"
+          className="hover:underline dark:text-white w-full text-right px-4"
         >
           Contact
         </Link>
-        <button
-          onClick={() => {
-            toggleDarkMode();
-            setIsMenuOpen(false);
-          }}
-          className="p-2 rounded transition-colors duration-200 text-black dark:text-white"
-          aria-label="Toggle Dark Mode"
-        >
-          {darkMode ? <MoonIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
-        </button>
+<button
+  onClick={() => {
+    toggleDarkMode();
+    setIsMenuOpen(false);
+  }}
+  className="p-2 rounded transition-colors duration-200 text-black dark:text-white mt-2 pr-8"
+  aria-label="Toggle Dark Mode"
+>
+  {darkMode ? <MoonIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
+</button>
+
       </div>
+
 
     </nav>
   );
