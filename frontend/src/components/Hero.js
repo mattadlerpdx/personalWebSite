@@ -46,9 +46,9 @@ useEffect(() => {
   return (
 <section
   ref={sectionRef}
-  className="relative z-0 min-h-[120vh] bg-white dark:bg-black"
+  className="relative z-0 min-h-[50vh] bg-white dark:bg-black"
 >
-  <div className="sticky top-0 h-screen flex items-center justify-center px-4 sm:px-8">
+  <div className="sticky h-screen flex items-center justify-center px-4 sm:px-8">
     <div className="max-w-screen-xl mx-auto w-full text-center">
       <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold flex flex-wrap gap-2 justify-center">
         {sentence.map((word, i) => (
@@ -65,11 +65,11 @@ useEffect(() => {
     </div>
 
      {showChevron && (
-  <div className="absolute bottom-4 w-full flex justify-center z-50">
-    <ChevronDownIcon
-      className="w-10 h-10 text-gray-400 dark:text-white animate-bounce transition-opacity duration-300 ease-in-out"
-      aria-hidden="true"
-    />
+<div className="absolute bottom-16 w-full flex justify-center z-50">
+<ChevronDownIcon
+  className="w-12 h-12 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 text-gray-400 dark:text-white animate-bounce transition-opacity duration-300 ease-in-out"
+  aria-hidden="true"
+/>
   </div>
 )}
 

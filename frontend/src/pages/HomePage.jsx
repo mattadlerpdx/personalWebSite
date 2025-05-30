@@ -2,10 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 import About from '../components/About';
-import Skills from '../components/Skills'; // ✅ import Skills component
-import KaleidoscopeTechStack from '../components/KaleidoscopeTechStack';
 import Projects from '../components/Projects';
-import Footer from '../components/Footer';
 
 const PageSection = ({ children, className = '' }) => (
   <section
@@ -23,19 +20,10 @@ export default function HomePage({ darkMode, triggerRef }) {
       {/* Hero section (handles its own scroll/pin) */}
       <Hero darkMode={darkMode} triggerRef={triggerRef} />
 
+
       {/* ABOUT Section */}
       <PageSection className="pt-16">
         <About darkMode={darkMode} />
-      </PageSection>
-
-      {/* SKILLS Section */}
-      <PageSection>
-        <Skills darkMode={darkMode} />
-      </PageSection>
-
-      {/* TECH STACK Section */}
-      <PageSection>
-        <KaleidoscopeTechStack darkMode={darkMode} />
       </PageSection>
 
       {/* PROJECTS Section */}

@@ -123,7 +123,6 @@ export default function GreetingOverlay3D({ onComplete }) {
         >
           <p>Hello, I'm Matt —</p>
           <p>engineer, system builder, explorer.</p>
-          <p className="mt-4 text-sm text-white/50">(click to skip)</p>
         </div>
       </div>
     </div>
