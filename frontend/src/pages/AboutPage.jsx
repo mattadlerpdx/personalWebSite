@@ -85,7 +85,7 @@ export default function AboutPage({ darkMode }) {
         <h2 className="text-3xl sm:text-4xl font-bold mb-4">Integration</h2>
         <p className="text-base sm:text-lg md:text-xl leading-relaxed">
           My work today blends AI-driven tools, cloud-native services, and
-          modern .NET platforms—always striving for practical impact and
+          modern .NET platforms— always striving for practical impact and
           thoughtful engineering.
         </p>
       </div>
