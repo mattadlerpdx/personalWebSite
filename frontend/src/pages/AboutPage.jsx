@@ -11,14 +11,12 @@ export default function AboutPage({ darkMode }) {
     const sections = gsap.utils.toArray('.story-section');
 
     sections.forEach((section, index) => {
-      // Determine glow color based on dark mode
-      // In the GSAP glow animation section:
+      // Determine glow color for bottom glow only
       const glowColor = darkMode
-        ? '0 0 20px rgba(255, 255, 255, 0.4)'  // Soft white glow in dark mode
-        : '0 0 20px rgba(173, 216, 230, 0.3)'; // Pastel blue glow in light mode
+        ? '0 10px 20px rgba(255, 255, 255, 0.7)'  // Subtle white glow in dark mode
+        : '0 10px 20px rgba(173, 216, 230, 0.7)'; // Subtle pastel blue glow in light mode
 
-
-      // Create glow effect animation
+      // Create bottom glow effect animation
       const glow = gsap.fromTo(
         section,
         { boxShadow: glowColor },
@@ -45,8 +43,8 @@ export default function AboutPage({ darkMode }) {
           scrollTrigger: {
             trigger: section,
             start: 'top 80%',
-            toggleActions: 'play none none none', // Play only once
-            onEnter: () => glow.play(), // Trigger glow when entering
+            toggleActions: 'play none none none',
+            onEnter: () => glow.play(),
           },
         }
       );
@@ -55,17 +53,14 @@ export default function AboutPage({ darkMode }) {
     return () => {
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
-  }, [darkMode]); // Depend on darkMode for dynamic color
+  }, [darkMode]);
 
   return (
     <section
       ref={containerRef}
       className="bg-white dark:bg-black text-black dark:text-white px-4 py-16 space-y-24"
     >
-      <div className="story-section max-w-3xl mx-auto text-center md:text-left 
-  hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-  dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-  transition-shadow duration-300">
+      <div className="story-section max-w-3xl mx-auto text-center md:text-left transition-shadow duration-300 p-4 sm:p-6">
         <h2 className="text-3xl sm:text-4xl font-bold mb-4">The Beginning</h2>
         <p className="text-base sm:text-lg md:text-xl leading-relaxed">
           My journey began as an English teacher in Taiwan, where I discovered
@@ -75,10 +70,7 @@ export default function AboutPage({ darkMode }) {
         </p>
       </div>
 
-      <div className="story-section max-w-3xl mx-auto text-center md:text-left 
-  hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-  dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-  transition-shadow duration-300">
+      <div className="story-section max-w-3xl mx-auto text-center md:text-left transition-shadow duration-300 p-4 sm:p-6">
         <h2 className="text-3xl sm:text-4xl font-bold mb-4">Exploration</h2>
         <p className="text-base sm:text-lg md:text-xl leading-relaxed">
           My journey of exploration led me to earn my master's degree in computer science,
@@ -89,10 +81,7 @@ export default function AboutPage({ darkMode }) {
         </p>
       </div>
 
-      <div className="story-section max-w-3xl mx-auto text-center md:text-left 
-  hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-  dark:hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] 
-  transition-shadow duration-300">
+      <div className="story-section max-w-3xl mx-auto text-center md:text-left transition-shadow duration-300 p-4 sm:p-6">
         <h2 className="text-3xl sm:text-4xl font-bold mb-4">Integration</h2>
         <p className="text-base sm:text-lg md:text-xl leading-relaxed">
           My work today blends AI-driven tools, cloud-native services, and

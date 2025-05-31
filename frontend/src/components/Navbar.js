@@ -18,13 +18,27 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
     }
   }, [animate]);
 
+  // Home button click handler
+  const handleHomeClick = () => {
+    // If already on homepage, manually scroll to top
+    if (location.pathname === '/' || location.hash === '#/' || location.pathname === '/#') {
+      window.scrollTo(0, 0);
+    }
+    setIsMenuOpen(false); // Also close the mobile menu if open
+  };
+
   return (
     <nav
       ref={sectionRef || navRef}
       className="fixed top-0 w-full bg-white dark:bg-black shadow z-50 flex justify-between items-center px-6 py-4 transition-colors duration-300"
     >
-      {/* Logo */}
-      <Link to="/" className="flex items-center gap-2" aria-label="Home">
+      {/* Logo/Home Button */}
+      <Link
+        to="/"
+        onClick={handleHomeClick}
+        className="flex items-center gap-2"
+        aria-label="Home"
+      >
         <img
           src="/centeredSvg.svg"
           alt="Matt Adler Logo"
@@ -78,14 +92,11 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
       </div>
 
       {/* Mobile Dropdown Menu */}
- <div
-  className={`absolute top-full left-0 right-0 bg-white dark:bg-black shadow-md sm:hidden flex flex-col items-end space-y-4 py-4 w-full transition-all duration-300 ease-in-out ${
-    isMenuOpen
-      ? 'opacity-100 translate-y-0 pointer-events-auto'
-      : 'opacity-0 -translate-y-4 pointer-events-none'
-  }`}
->
-
+      <div
+        className={`absolute top-full left-0 right-0 bg-white dark:bg-black shadow-md sm:hidden flex flex-col items-end space-y-4 py-4 w-full transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'
+        }`}
+      >
         <Link
           to="/about"
           onClick={() => setIsMenuOpen(false)}
@@ -107,20 +118,17 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
         >
           Contact
         </Link>
-<button
-  onClick={() => {
-    toggleDarkMode();
-    setIsMenuOpen(false);
-  }}
-  className="p-2 rounded transition-colors duration-200 text-black dark:text-white mt-2 pr-8"
-  aria-label="Toggle Dark Mode"
->
-  {darkMode ? <MoonIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
-</button>
-
+        <button
+          onClick={() => {
+            toggleDarkMode();
+            setIsMenuOpen(false);
+          }}
+          className="p-2 rounded transition-colors duration-200 text-black dark:text-white mt-2 pr-8"
+          aria-label="Toggle Dark Mode"
+        >
+          {darkMode ? <MoonIcon className="h-6 w-6" /> : <SunIcon className="h-6 w-6" />}
+        </button>
       </div>
-
-
     </nav>
   );
 };

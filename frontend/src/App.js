@@ -41,11 +41,6 @@ function App() {
 
       requestAnimationFrame(() => {
         setTimeout(() => {
-          window.scrollTo({
-            top: 50,
-            behavior: 'smooth',
-          });
-
           ScrollTrigger.refresh();
         }, 100);
       });
@@ -73,7 +68,7 @@ function App() {
             contentVisible ? 'opacity-100' : 'opacity-0'
           )}
         >
-          <ScrollToTop /> {/* ✅ Added here! */}
+          <ScrollToTop /> 
           <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} sectionRef={navBarRef} />
           <main className="flex-grow flex flex-col w-full pt-20 sm:pt-24">
             <AppRoutes darkMode={darkMode} triggerRef={navBarRef} />
