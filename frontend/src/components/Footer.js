@@ -9,9 +9,6 @@ export default function Footer() {
         <Link to="/about" className="hover:text-black dark:hover:text-white transition">
           About
         </Link>
-        <Link to="/projects" className="hover:text-black dark:hover:text-white transition">
-          Projects
-        </Link>
         <a
           href={getResumeUrl()}
           target="_blank"
@@ -20,6 +17,9 @@ export default function Footer() {
         >
           Resume
         </a>
+        <Link to="/projects" className="hover:text-black dark:hover:text-white transition">
+          Projects
+        </Link>
         <Link to="/contact" className="hover:text-black dark:hover:text-white transition">
           Contact
         </Link>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MoonIcon, SunIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { gsap } from 'gsap';
+import { getResumeUrl } from '../api';
 
 const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
   const location = useLocation();
@@ -20,11 +21,10 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
 
   // Home button click handler
   const handleHomeClick = () => {
-    // If already on homepage, manually scroll to top
     if (location.pathname === '/' || location.hash === '#/' || location.pathname === '/#') {
       window.scrollTo(0, 0);
     }
-    setIsMenuOpen(false); // Also close the mobile menu if open
+    setIsMenuOpen(false);
   };
 
   return (
@@ -70,6 +70,14 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
         >
           About
         </Link>
+        <a
+          href={getResumeUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline dark:text-white transition"
+        >
+          Resume
+        </a>
         <Link
           to="/projects"
           className={`hover:underline dark:text-white ${location.pathname === '/projects' ? 'underline' : ''}`}
@@ -104,6 +112,15 @@ const Navbar = ({ darkMode, toggleDarkMode, animate, sectionRef }) => {
         >
           About
         </Link>
+        <a
+          href={getResumeUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setIsMenuOpen(false)}
+          className="hover:underline dark:text-white w-full text-right px-4"
+        >
+          Resume
+        </a>
         <Link
           to="/projects"
           onClick={() => setIsMenuOpen(false)}
