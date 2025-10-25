@@ -1,0 +1,47 @@
+# Backend-specific .gitignore
+
+# Environment files (NEVER commit these!)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+bin/
+main
+
+# Go dependencies
+vendor/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Credentials and secrets
+credentials/
+*.pem
+*.key
+*.crt
+service-account*.json

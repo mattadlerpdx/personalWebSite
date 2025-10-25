@@ -1,0 +1,54 @@
+# .gcloudignore - Files to exclude from Cloud Build uploads
+# This speeds up deployments by not uploading unnecessary files
+
+# Git files
+.git/
+.gitignore
+.github/
+
+# Environment files
+.env
+.env.*
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+
+# Node modules (will be installed in Docker)
+node_modules/
+frontend/node_modules/
+
+# Build artifacts (will be built in Docker)
+frontend/build/
+frontend/dist/
+backend/bin/
+backend/main
+
+# Testing
+coverage/
+*.test
+test-data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation (not needed for builds)
+*.md
+!README.md
+
+# Docker compose (only for local dev)
+docker-compose.yml
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak

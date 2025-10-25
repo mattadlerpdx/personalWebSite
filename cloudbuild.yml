@@ -1,0 +1,47 @@
+steps:
+  # 1. Build backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-backend:latest', './backend']
+
+  # 2. Build frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-frontend:latest', './frontend']
+
+  # 3. Push backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-backend:latest']
+
+  # 4. Push frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-frontend:latest']
+
+  # 5. Deploy backend to Cloud Run with secrets and env vars
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run', 'deploy', 'personal-backend-service',
+        '--image=us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-backend:latest',
+        '--region=us-west1',
+        '--platform=managed',
+        '--allow-unauthenticated',
+        '--set-secrets=SMTP_PASS=backend-smtp-pass:latest',
+        '--set-env-vars=SMTP_USER=adlerm731@gmail.com'
+      ]
+
+  # 6. Deploy frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'run', 'deploy', 'personal-frontend-service',
+        '--image=us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-frontend:latest',
+        '--region=us-west1',
+        '--platform=managed',
+        '--allow-unauthenticated'
+      ]
+
+images:
+  - 'us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-backend:latest'
+  - 'us-west1-docker.pkg.dev/personalwebsite-460704/personalwebsite-repo/personal-frontend:latest'
+

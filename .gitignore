@@ -99,3 +99,12 @@ go.work.sum
 
 # Local test files
 test-data/
+
+# Private documentation (keep README.md)
+CODE_AUDIT.md
+DEPLOYMENT.md
+DEPLOYMENT_CHECKLIST.md
+IMPROVEMENTS_SUMMARY.md
+GSAP_REFACTOR_*.md
+CLOUD_BUILD_TRIGGERS.md
+QUICK_START.md

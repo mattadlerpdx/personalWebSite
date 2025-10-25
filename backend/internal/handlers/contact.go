@@ -3,31 +3,18 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/smtp"
 	"os"
-	"regexp"
-	"strings"
 	"time"
 
 	"github.com/mattadlerpdx/personalWebsite/backend/internal/config"
+	"github.com/mattadlerpdx/personalWebsite/backend/internal/models"
 )
 
-// ContactForm represents the JSON payload
-type ContactForm struct {
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Message string `json:"message"`
-}
-
-// sanitizeInput removes URLs from message body
-func sanitizeInput(input string) string {
-	re := regexp.MustCompile(`https?://[^\s]+`)
-	return re.ReplaceAllString(input, "[LINK REMOVED]")
-}
-
 // logSubmission writes sanitized messages to a local file
-func logSubmission(form ContactForm) {
+func logSubmission(form models.ContactForm) {
 	logEntry := fmt.Sprintf("[%s] Name: %s | Email: %s | Message: %s\n",
 		time.Now().Format(time.RFC3339), form.Name, form.Email, form.Message)
 
@@ -40,27 +27,27 @@ func logSubmission(form ContactForm) {
 
 func ContactHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("X-Content-Type-Options", "nosniff")
-	w.Header().Set("Referrer-Policy", "no-referrer")
 
 	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		http.Error(w, `{"error":"Method not allowed"}`, http.StatusMethodNotAllowed)
 		return
 	}
 
-	var form ContactForm
+	var form models.ContactForm
 	if err := json.NewDecoder(r.Body).Decode(&form); err != nil {
-		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		http.Error(w, `{"error":"Invalid JSON"}`, http.StatusBadRequest)
 		return
 	}
 
-	// Basic validation
-	if strings.TrimSpace(form.Name) == "" || strings.TrimSpace(form.Email) == "" || strings.TrimSpace(form.Message) == "" {
-		http.Error(w, "All fields are required", http.StatusBadRequest)
+	// Validate form
+	if err := form.Validate(); err != nil {
+		log.Printf("Validation error: %v", err)
+		http.Error(w, fmt.Sprintf(`{"error":"%s"}`, err.Error()), http.StatusBadRequest)
 		return
 	}
 
-	form.Message = sanitizeInput(form.Message)
+	// Sanitize input
+	form.Sanitize()
 	logSubmission(form)
 
 	// Compose message

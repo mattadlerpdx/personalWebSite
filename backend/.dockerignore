@@ -1,0 +1,36 @@
+# Backend .dockerignore - Exclude from Docker builds
+
+# Environment files (these are set via Cloud Run, not baked into image)
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+
+# Build artifacts
+bin/
+main
+*.exe
+*.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Credentials (should use Secret Manager, not files)
+credentials/
+*.pem
+*.key
+service-account*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

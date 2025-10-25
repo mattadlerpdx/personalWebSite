@@ -8,29 +8,12 @@ import (
 
 	"github.com/mattadlerpdx/personalWebsite/backend/internal/config"
 	"github.com/mattadlerpdx/personalWebsite/backend/internal/handlers"
+	"github.com/mattadlerpdx/personalWebsite/backend/internal/middleware"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"golang.org/x/time/rate"
 )
-
-// === Middleware: Secure HTTP Headers ===
-func secureHeaders(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("X-Content-Type-Options", "nosniff")
-		w.Header().Set("X-Frame-Options", "DENY")
-		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
-		w.Header().Set("Content-Security-Policy", "default-src 'self'")
-		next.ServeHTTP(w, r)
-	})
-}
-
-// === Middleware: Logging Requests ===
-func logMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s - %s %s", r.RemoteAddr, r.Method, r.URL.Path)
-		next.ServeHTTP(w, r)
-	})
-}
 
 func main() {
 
@@ -39,11 +22,16 @@ func main() {
 	// === Router Setup ===
 	r := mux.NewRouter()
 
+	// === Create Rate Limiter for Contact Form ===
+	// 1 request every 3 seconds with burst of 5
+	contactLimiter := middleware.NewIPRateLimiter(rate.Limit(1.0/3.0), 5)
+	go contactLimiter.Cleanup() // Start cleanup goroutine
+
 	// === API Routes ===
 	r.HandleFunc("/projects", handlers.ProjectsHandler).Methods("GET")
 	r.HandleFunc("/about", handlers.AboutHandler).Methods("GET")
-	r.HandleFunc("/contact", handlers.ContactHandler).Methods("POST")
-	r.HandleFunc("/resume", handlers.ResumeHandler).Methods("GET")
+	r.Handle("/contact", contactLimiter.Limit(http.HandlerFunc(handlers.ContactHandler))).Methods("POST")
+	r.HandleFunc("/logs", handlers.LogVisitHandler).Methods("POST")
 
 	// === Serve Static Files ===
 	buildPath := filepath.Join("..", "..", "frontend", "build")
@@ -68,6 +56,7 @@ func main() {
 	allowedOrigins := []string{
 		"http://localhost:3000",
 		"https://personal-frontend-service-684800965366.us-west1.run.app",
+		"https://mattadler.dev",
 	}
 
 	c := cors.New(cors.Options{
@@ -78,7 +67,7 @@ func main() {
 	})
 
 	// === Compose Final Handler with Middleware Stack ===
-	finalHandler := logMiddleware(secureHeaders(c.Handler(r)))
+	finalHandler := middleware.Logging(middleware.SecureHeaders(c.Handler(r)))
 
 	// === Determine Port for Cloud Run / Local ===
 	port := os.Getenv("PORT")

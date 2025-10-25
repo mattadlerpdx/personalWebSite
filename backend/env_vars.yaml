@@ -1,0 +1,12 @@
+# env_vars.yaml - Backend Production Environment Variables
+# This file is used by Cloud Run for production deployments
+# Secrets (like SMTP_PASS) should be managed via Google Secret Manager
+
+# Server Configuration
+PORT: "8080"
+
+# SMTP Configuration (email address only - password comes from Secret Manager)
+SMTP_USER: "adlerm731@gmail.com"
+
+# Application Environment
+APP_ENV: "production"
