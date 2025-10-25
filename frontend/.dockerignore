@@ -1,5 +1,43 @@
-node_modules
-.git
+# Frontend .dockerignore - Exclude from Docker builds
+
+# Dependencies (will be installed in Docker)
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production builds (will be built in Docker)
+/build
+/dist
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git/
 .gitignore
-npm-debug.log
-src-folder-react.zip
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.tar.gz
+
+# Documentation
+*.md
+README.md

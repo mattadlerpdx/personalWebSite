@@ -5,15 +5,13 @@ import Projects from './pages/ProjectsPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 
-
-
-const AppRoutes = ({ darkMode, triggerRef}) => {
+const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage darkMode={darkMode} triggerRef={triggerRef} />} />
-      <Route path="/projects" element={<Projects darkMode={darkMode} />} />
-      <Route path="/about" element={<AboutPage darkMode={darkMode} />} />
-      <Route path="/contact" element={<ContactPage darkMode={darkMode} />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/projects" element={<Projects />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

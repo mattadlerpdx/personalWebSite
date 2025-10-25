@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
-export default function Skills({ darkMode }) {
+export default function Skills() {
+  const { darkMode } = useTheme();
   return (
       <div className=" bg-white dark:bg-black p-8 md:p-12 max-w-5xl mx-auto mt-16 md:pl-40 rounded-xl shadow-md">
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-black dark:text-white text-center md:text-left">

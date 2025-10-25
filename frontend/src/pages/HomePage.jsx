@@ -1,8 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Projects from '../components/Projects';
+import { useTheme } from '../contexts/ThemeContext';
+import usePageTransition from '../hooks/usePageTransition';
+
+function logVisit(route) {
+  fetch('/logs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ route })
+  }).catch(() => {});
+}
 
 const PageSection = ({ children, className = '' }) => (
   <section
@@ -14,11 +23,19 @@ const PageSection = ({ children, className = '' }) => (
   </section>
 );
 
-export default function HomePage({ darkMode, triggerRef }) {
+export default function HomePage() {
+  const { darkMode } = useTheme();
+  // Disable transition for HomePage - Hero handles its own animation
+  const containerRef = usePageTransition({ disabled: true });
+
+  useEffect(() => {
+    logVisit('/');
+  }, []);
+
   return (
-    <div className="bg-white dark:bg-black text-black dark:text-white">
+    <div ref={containerRef} className="bg-white dark:bg-black text-black dark:text-white">
       {/* Hero section (handles its own scroll/pin) */}
-      <Hero darkMode={darkMode} triggerRef={triggerRef} />
+      <Hero />
 
 
       {/* ABOUT Section */}

@@ -21,6 +21,15 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        miami: {
+          pink: '#ff6ec7',
+          purple: '#da70d6',
+          blue: '#7b68ee',
+          cyan: '#5ee6eb',
+          teal: '#20c997',
+        },
+      },
       keyframes: {
         floatOrganic: {
           '0%': { transform: 'translate(-50%, -50%) translateY(0px)' },
@@ -37,10 +46,21 @@ module.exports = {
           '75%': { transform: 'rotate(1deg)' },
           '100%': { transform: 'rotate(0deg)' },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% center' },
+          '100%': { backgroundPosition: '200% center' },
+        },
       },
       animation: {
         floatOrganic: 'floatOrganic 5s ease-in-out infinite',
         wiggleRotate: 'wiggleRotate 6s ease-in-out infinite',
+        shimmer: 'shimmer 15s ease-in-out infinite',
+      },
+      backgroundImage: {
+        'gradient-miami': 'linear-gradient(90deg, #ff6ec7, #da70d6, #7b68ee, #5ee6eb, #20c997, #5ee6eb, #7b68ee, #da70d6, #ff6ec7)',
+      },
+      backgroundSize: {
+        '200': '200%',
       },
     },
   },

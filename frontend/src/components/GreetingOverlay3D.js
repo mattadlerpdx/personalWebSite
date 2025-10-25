@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { gsap } from 'gsap';
+import { DURATIONS, EASINGS } from '../utils/animationConstants';
 
 function getResponsiveCameraRadius() {
   return 2.5;
@@ -51,7 +52,7 @@ function StaticSphere() {
   return (
     <mesh scale={[scale, scale, scale]}>
       <sphereGeometry args={[2, 64, 64]} />
-      <meshBasicMaterial wireframe color="#00" />
+      <meshBasicMaterial wireframe color="#ffffff" />
     </mesh>
   );
 }
@@ -60,17 +61,16 @@ export default function GreetingOverlay3D({ onComplete }) {
   const overlayRef = useRef();
   const contentRef = useRef();
   const textRef = useRef();
-  const hasFadedOut = useRef(false); // 🛡 Prevents double-invocation
+  const hasFadedOut = useRef(false);
 
   // Shared function to fade out content and call onComplete
   const triggerFadeOut = () => {
     if (hasFadedOut.current) return;
     hasFadedOut.current = true;
-    console.log("pressed!")
     gsap.to(contentRef.current, {
       opacity: 0,
-      duration: 1.5,
-      ease: 'power2.inOut',
+      duration: DURATIONS.SLOW,
+      ease: EASINGS.SMOOTH,
       onComplete: onComplete,
     });
   };
@@ -82,11 +82,11 @@ export default function GreetingOverlay3D({ onComplete }) {
     tl.fromTo(
       textRef.current,
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }
+      { opacity: 1, y: 0, duration: DURATIONS.MEDIUM, ease: EASINGS.SMOOTH }
     )
       .to(
         textRef.current,
-        { opacity: 0, y: -20, duration: 1, ease: 'power2.inOut' },
+        { opacity: 0, y: -20, duration: DURATIONS.MEDIUM, ease: EASINGS.SMOOTH },
         '+=0.8'
       )
       .add(triggerFadeOut, '-=0.3');
@@ -128,4 +128,3 @@ export default function GreetingOverlay3D({ onComplete }) {
     </div>
   );
 }
-

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { sendContactForm } from '../api';
+import { useTheme } from '../contexts/ThemeContext';
+import usePageTransition from '../hooks/usePageTransition';
 
-function ContactPage({ darkMode }) {
+function ContactPage() {
+  const { darkMode } = useTheme();
+  const containerRef = usePageTransition();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,7 +34,7 @@ function ContactPage({ darkMode }) {
   };
 
   return (
-    <div className="min-h-screen px-4 py-16 bg-white text-black dark:bg-black dark:text-white transition-colors duration-500">
+    <div ref={containerRef} className="min-h-screen px-4 py-16 bg-white text-black dark:bg-black dark:text-white transition-colors duration-500">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-12">Contact Me</h1>
 

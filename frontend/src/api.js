@@ -46,3 +46,17 @@ export const sendContactForm = async (formData) => {
 };
 
 export const getResumeUrl = () => '/resume.pdf';
+
+export const logVisit = async (route) => {
+  try {
+    await fetch(`${API_BASE_URL}/logs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ route }),
+    });
+  } catch (error) {
+    // Silent fail – we don't want logging errors to affect user experience
+    console.warn('Visit log failed:', error);
+  }
+};
+

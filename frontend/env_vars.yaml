@@ -1,0 +1,13 @@
+# env_vars.yaml - Frontend Production Environment Variables
+# This file is used by Cloud Run for production deployments
+
+# API Backend URL (automatically set during build)
+# The React app hardcodes this at build time, so this is primarily for documentation
+# See frontend/src/api.js for the actual configuration
+
+# CORS and security headers are handled by nginx.conf
+# React environment variables must be set at BUILD TIME, not runtime
+# For runtime configuration, we'd need to inject via a config endpoint
+
+# Note: React apps bake environment variables into the bundle at build time
+# If you need runtime configuration, consider using a /config endpoint from backend
